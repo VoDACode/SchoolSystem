@@ -1,0 +1,13 @@
+<div class="content">
+  <div class="input-control">
+    <span class="error-message"></span>
+    <input type="text" class="form-control" placeholder="Login" required [(ngModel)]="model.login" />
+  </div>
+  <div class="input-control">
+    <span class="error-message"></span>
+    <input type="password" class="form-control" placeholder="Password" required [(ngModel)]="model.password" />
+  </div>
+  <div class="input-control relative">
+    <button class="vertical-center" (click)="loginEvent()">Login</button>
+  </div>
+</div>
