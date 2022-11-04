@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { LoginData } from 'src/models/LoginData';
 
 @Component({
@@ -8,10 +8,19 @@ import { LoginData } from 'src/models/LoginData';
 })
 export class LoginComponent {
 
+  @ViewChild('error') errorElement: ElementRef<HTMLSpanElement> | undefined = undefined;
+
   model: LoginData = new LoginData();
 
   constructor() { }
 
+  onChangeInput(): void {
+    //@ts-ignore
+    this.errorElement.nativeElement.innerText = "";
+  }
+
   loginEvent(): void {
+    //@ts-ignore
+    this.errorElement.nativeElement.innerText = "Incorrect login or password.";
   }
 }
