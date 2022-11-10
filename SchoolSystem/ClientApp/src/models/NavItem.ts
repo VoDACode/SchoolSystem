@@ -4,6 +4,6 @@ export class NavItem {
         public disabled: boolean,
         public iconName: string,
         public route: string,
-        public children: NavItem[]
+        public children: NavItem[] = []
     ) { }
 }

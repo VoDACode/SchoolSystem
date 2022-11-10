@@ -1,5 +1,6 @@
 import { StorageService } from './../services/storage.service';
 import { Component, OnInit } from '@angular/core';
+import { AccsesLevel } from 'src/types/AccsesLevelType';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  get accsesLevel(): 'ADMIN' | 'TEACHER' | 'STUDENT' {
+  get accsesLevel(): AccsesLevel {
     return this._storage.accsesLevel;
   }
 

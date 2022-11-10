@@ -45,8 +45,19 @@ export class NavMenuComponent {
 
   constructor(public storage: StorageService) {
     this._navigation = [
-      new NavItem('Головна', true, 'home' ,'/home', []),
-      new NavItem('Моя статистика', storage.accsesLevel == 'STUDENT', 'stats', '/my/stats', []),
+      new NavItem('Головна', true, 'home' ,'/home'),
+      new NavItem('Успішність', storage.accsesLevel == 'STUDENT' || storage.accsesLevel == 'PARENT', 'stats', '/my/stats'),
+      new NavItem('Домашні завдання', storage.accsesLevel == 'STUDENT' || storage.accsesLevel == 'PARENT', 'homework', '/my/homework'),
+      new NavItem('Розклад', true, 'schedule', '/schedule'),
+      new NavItem('Повідомлення', true, 'message', '/my/message'),
+      new NavItem('Вчитклі', storage.accsesLevel == 'STUDENT' || storage.accsesLevel == 'PARENT', 'teacher', '/my/teacher'),
+      new NavItem('Дисципліни', storage.accsesLevel == 'TEACHER', 'discipline', '/discipline'),
+      new NavItem('Класи', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'group', '/my/group'),
+      new NavItem('Домашні завдання', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'homework', '/my/homework'),
+      new NavItem('План занять', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'plan', '/my/plan'),
+      new NavItem('Користувачі', storage.accsesLevel == 'ADMIN', 'user', '/my/user'),
+      new NavItem('Дисципліни', storage.accsesLevel == 'ADMIN', 'discipline', '/discipline'),
+      new NavItem('Довідки', true, 'reference', '/reference'),
     ];
   }
 

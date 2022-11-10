@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
+import { AccsesLevel } from 'src/types/AccsesLevelType';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
 
-  private static _accsesLevel: 'ADMIN' | 'TEACHER' | 'STUDENT' = 'STUDENT';
+  private static _accsesLevel: AccsesLevel = 'PARENT';
 
   constructor() { }
 
-  get accsesLevel(): 'ADMIN' | 'TEACHER' | 'STUDENT' {
+  get accsesLevel(): AccsesLevel {
     return StorageService._accsesLevel;
   }
 
-  set accsesLevel(value: 'ADMIN' | 'TEACHER' | 'STUDENT') {
+  set accsesLevel(value: AccsesLevel) {
     StorageService._accsesLevel = value;
   }
 }
