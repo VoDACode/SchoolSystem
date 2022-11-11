@@ -1,0 +1,52 @@
+<main #main>
+    <div class="days">
+        <div class="day" *ngFor="let day of days">
+            <div>
+                <div class="day-name">
+                    <span>{{day.day}}</span>
+                </div>
+                <div>
+                    <span>{{day.month}}.{{day.num}}</span>
+                </div>
+            </div>
+            <div class="grid"></div>
+        </div>
+    </div>
+    <div class="content">
+        <div #timesElement class="times">
+            <div class="time" *ngFor="let time of times">
+                <span>{{time}}</span>
+            </div>
+        </div>
+        <div class="timetable">
+            <div class="record" *ngFor="let record of lessons" [style.top]="record.calcTop + 'px'"
+                [style.left]="record.calcLeft + 'px'" (click)="showDetails(record)">
+                <div class="subject">
+                    <span>{{record.name}}</span>
+                </div>
+                <div class="description">
+                    <span>{{record.getFromToTime}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<jw-modal id="lesson-details" [horizontalMargin]="'20%'">
+    <div>
+        <div class="modal-header">
+            <h4 class="modal-title">{{detailsItem.name}}</h4>
+        </div>
+        <div class="modal-body">
+            <div>
+                <span>{{detailsItem.getFromToTime}} ({{detailsItem.duration}} хв)</span>
+            </div>
+            <div>
+                <span>Клас: {{detailsItem.room}}</span>
+            </div>
+            <div>
+                <span>{{detailsItem.teacher}}</span>
+            </div>
+        </div>
+    </div>
+</jw-modal>

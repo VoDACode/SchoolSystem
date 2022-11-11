@@ -6,7 +6,7 @@ import { AccsesLevel } from 'src/types/AccsesLevelType';
 })
 export class StorageService {
 
-  private static _accsesLevel: AccsesLevel = 'PARENT';
+  private static _accsesLevel: AccsesLevel = 'ADMIN';
 
   constructor() { }
 

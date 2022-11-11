@@ -11,6 +11,9 @@ import { AdminHomeComponent } from './admin/home/home.component';
 import { TeacherHomeComponent } from './teacher/home/home.component';
 import { StudentHomeComponent } from './student/home/home.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
+import { TimetableComponent } from './timetable/timetable.component';
+import { TimetablePageComponent } from './timetable.page/timetable.page.component';
+import { ModalModule } from './_modal';
 
 @NgModule({
   declarations: [
@@ -21,12 +24,15 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
     AdminHomeComponent,
     TeacherHomeComponent,
     StudentHomeComponent,
+    TimetableComponent,
+    TimetablePageComponent,
   ],
   imports: [
     FormsModule,
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ModalModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

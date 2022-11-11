@@ -3,11 +3,11 @@
 }
 header{
   height: var(--header-height);
-  background-color: rgb(123, 229, 255);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid #ccc;
   padding: 0 20px;
 }
 .open-menu-button img{
@@ -23,8 +23,9 @@ header{
   top: var(--header-height);
   bottom: 0;
   width: 300px;
-  background-color: rgb(4, 255, 0);
+  background-color: rgba(164, 200, 255, 1);
   z-index: 100;
+  border-right: 1px solid rgb(76, 192, 255)
 }
 
 .close-menu-bg{
@@ -33,6 +34,24 @@ header{
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0);
   z-index: 99;
+}
+
+.item:hover{
+  background-color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+}
+
+.item{
+  --padding: 20px;
+  width: 100%;
+  padding-top: calc(var(--padding) / 2);
+  padding-bottom: calc(var(--padding) / 2);
+  padding-left: 10px;
+}
+
+.item img{
+  width: 24px;
+  margin-right: 10px;
 }

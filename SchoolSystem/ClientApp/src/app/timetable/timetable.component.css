@@ -1,0 +1,94 @@
+main {
+    display: grid;
+    grid-template-rows: 75px auto;
+    width: max-content;
+    --box-day-size: 75px;
+    --times-height: 70px;
+    border: 1px solid #ccc;
+    margin: 0;
+    padding: 0;
+}
+
+main>.days {
+    position: relative;
+    margin-left: 78.2px;
+}
+
+main>.days>div {
+    display: inline-block;
+    width: calc(var(--box-day-size) * 1.5);
+    height: var(--box-day-size);
+    position: relative;
+    border: 1px solid #ccc;
+}
+
+main>.days>div>div {
+    text-align: center;
+    vertical-align: middle;
+}
+
+main>.days>div>div {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.day>.grid {
+    left: -0.8px !important;
+    top: var(--box-day-size) !important;
+    border-left: 1px solid #ccc;
+    transform: none !important;
+    width: 1px;
+    transform: none;
+}
+
+.content {
+    position: relative;
+    width: calc(100% + 1.8px);
+    margin-left: -0.8px;
+}
+
+.times {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 0;
+}
+
+.timetable {
+    --left: 50px;
+    z-index: 1;
+    position: absolute;
+    left: var(--left);
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - var(--left));
+}
+
+.timetable>div {
+    width: calc(var(--box-day-size) * 1.5);
+    background-color: rgb(0, 167, 244);
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    height: var(--times-height);
+    cursor: pointer;
+}
+
+.times>div {
+    border: 1px solid #ccc;
+    height: var(--times-height);
+    position: relative;
+    margin-left: -0.6px;
+}
+
+.times>div span {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translate(0, -50%);
+}

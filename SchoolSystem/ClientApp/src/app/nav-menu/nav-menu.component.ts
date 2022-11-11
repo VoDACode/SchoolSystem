@@ -45,19 +45,17 @@ export class NavMenuComponent {
 
   constructor(public storage: StorageService) {
     this._navigation = [
-      new NavItem('Головна', true, 'home' ,'/home'),
-      new NavItem('Успішність', storage.accsesLevel == 'STUDENT' || storage.accsesLevel == 'PARENT', 'stats', '/my/stats'),
-      new NavItem('Домашні завдання', storage.accsesLevel == 'STUDENT' || storage.accsesLevel == 'PARENT', 'homework', '/my/homework'),
-      new NavItem('Розклад', true, 'schedule', '/schedule'),
-      new NavItem('Повідомлення', true, 'message', '/my/message'),
-      new NavItem('Вчитклі', storage.accsesLevel == 'STUDENT' || storage.accsesLevel == 'PARENT', 'teacher', '/my/teacher'),
-      new NavItem('Дисципліни', storage.accsesLevel == 'TEACHER', 'discipline', '/discipline'),
-      new NavItem('Класи', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'group', '/my/group'),
-      new NavItem('Домашні завдання', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'homework', '/my/homework'),
-      new NavItem('План занять', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'plan', '/my/plan'),
-      new NavItem('Користувачі', storage.accsesLevel == 'ADMIN', 'user', '/my/user'),
-      new NavItem('Дисципліни', storage.accsesLevel == 'ADMIN', 'discipline', '/discipline'),
-      new NavItem('Довідки', true, 'reference', '/reference'),
+      new NavItem('Головна', true, 'icons8-home-page-48.png' ,'/home'),
+      new NavItem('Успішність', storage.accsesLevel == 'STUDENT' || storage.accsesLevel == 'PARENT', 'icons8-analytics-48.png', '/my/stats'),
+      new NavItem('Домашні завдання', storage.accsesLevel == 'STUDENT' || storage.accsesLevel == 'PARENT', 'icons8-homework-40.png', '/my/homework'),
+      new NavItem('Розклад', true, 'icons8-gantt-chart-48.png', '/timetable'),
+      new NavItem('Повідомлення', true, 'icons8-chat-message-48.png', '/my/message'),
+      new NavItem('Вчителі', storage.accsesLevel == 'STUDENT' || storage.accsesLevel == 'PARENT', 'icons8-training-48.png', '/my/teacher'),
+      new NavItem('Дисципліни', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'icons8-discipline-64.png', '/discipline'),
+      new NavItem('Класи', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'icons8-groups-64.png', '/my/group'),
+      new NavItem('План занять', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'icons8-what-i-do-48.png', '/my/plan'),
+      new NavItem('Користувачі', storage.accsesLevel == 'ADMIN', 'icons8-people-48.png', '/my/user'),
+      new NavItem('Довідки', true, 'icons8-reference-64.png', '/reference'),
     ];
   }
 

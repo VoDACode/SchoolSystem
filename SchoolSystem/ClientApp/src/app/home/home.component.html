@@ -1,4 +1,4 @@
 <app-nav-menu></app-nav-menu>
 <app-admin-home *ngIf="accsesLevel == 'ADMIN'"></app-admin-home>
 <app-teacher-home *ngIf="accsesLevel == 'TEACHER'"></app-teacher-home>
-<app-student-home *ngIf="accsesLevel == 'STUDENT'"></app-student-home>
+<app-student-home *ngIf="accsesLevel == 'STUDENT' || accsesLevel == 'PARENT'"></app-student-home>

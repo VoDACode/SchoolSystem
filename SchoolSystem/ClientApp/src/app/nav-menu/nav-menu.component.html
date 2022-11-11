@@ -5,14 +5,14 @@
     </div>
   </header>
   <nav [@openClose]="isOpen ? 'open' : 'closed'" class="nav-menu">
-    <ul>
-      <li *ngFor="let item of navigation" [routerLink]="item.route" (click)="closeMenu()">
+    <div class="items">
+      <div class="item" *ngFor="let item of navigation" [routerLink]="item.route" (click)="closeMenu()">
         <div>
           <img src="assets\images\{{item.iconName}}">
-          <a>{{item.displayName}}</a>
+          <span>{{item.displayName}}</span>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
   </nav>
   <div class="close-menu-bg" (click)="closeMenu()" *ngIf="isOpen"></div>
 </div>
