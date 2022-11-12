@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 
 import { ModalService } from './modal.service';
 
@@ -13,6 +13,8 @@ export class ModalComponent implements OnInit, OnDestroy {
     @Input() id: string;
     @Input() viewCloseButton: boolean = true;
     @Input() horizontalMargin: string = "40px";
+
+    @Output() onclose = new EventEmitter();
     private element: any;
 
     constructor(private modalService: ModalService, private el: ElementRef) {
@@ -57,5 +59,6 @@ export class ModalComponent implements OnInit, OnDestroy {
     close(): void {
         this.element.style.display = 'none';
         document.body.classList.remove('jw-modal-open');
+        this.onclose.emit();
     }
 }

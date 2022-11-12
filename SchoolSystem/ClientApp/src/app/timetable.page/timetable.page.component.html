@@ -1,2 +1,6 @@
 <app-nav-menu></app-nav-menu>
-<app-timetable></app-timetable>
+<div class="form-check form-switch" *ngIf="accsesLevel == 'ADMIN'">
+    <input class="form-check-input" type="checkbox" [(ngModel)]="editMode" id="flexSwitchCheckDefault">
+    <label class="form-check-label" for="flexSwitchCheckDefault">Edit mode</label>
+</div>
+<app-timetable [editMode]="editMode"></app-timetable>

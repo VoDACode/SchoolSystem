@@ -92,3 +92,58 @@ main>.days>div>div {
     left: 5px;
     transform: translate(0, -50%);
 }
+
+.record.empty {
+    position: relative;
+    background-color: rgba(255, 255, 255, 0) !important;
+}
+
+.record.empty:hover {
+    cursor: default !important;
+}
+
+.record.empty .add-new-item img:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.record.empty .add-new-item img {
+    --image-plus-size: 55px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: var(--image-plus-size);
+    height: var(--image-plus-size);
+    opacity: 0.4;
+}
+
+.main-box {
+    display: grid;
+    grid-template-columns: 64px auto 64px;
+}
+
+.arrow-right,
+.arrow-left {
+    position: relative;
+}
+
+.arrow-right img,
+.arrow-left img {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+    opacity: 0.3;
+}
+
+.arrow-right img:hover,
+.arrow-left img:hover {
+    opacity: 1;
+}
+
+.arrow-right img {
+    transform: scale(-1, 1);
+}

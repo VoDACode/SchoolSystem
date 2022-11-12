@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AccsesLevel } from 'src/types/AccsesLevelType';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-timetable.page',
@@ -7,7 +9,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TimetablePageComponent implements OnInit {
 
-  constructor() { }
+  get accsesLevel(): AccsesLevel {
+    return this.storage.accsesLevel;
+  }
+
+  editMode: boolean = false;
+
+  constructor(private storage: StorageService) { }
 
   ngOnInit(): void {
   }

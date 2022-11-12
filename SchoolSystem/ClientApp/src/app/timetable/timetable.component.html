@@ -1,39 +1,73 @@
-<main #main>
-    <div class="days">
-        <div class="day" *ngFor="let day of days">
-            <div>
-                <div class="day-name">
-                    <span>{{day.day}}</span>
-                </div>
+<div class="main-box">
+    <div class="arrow-left">
+        <img src="assets\images\icons8-arrow-pointing-left-64.png" (click)="prevWeek()">
+    </div>
+    <main #main>
+        <div class="days">
+            <div class="day" *ngFor="let day of days">
                 <div>
-                    <span>{{day.month}}.{{day.num}}</span>
+                    <div class="day-name">
+                        <span>{{day.day}}</span>
+                    </div>
+                    <div>
+                        <span>{{day.num}}.{{day.month}}</span>
+                    </div>
+                </div>
+                <div class="grid"></div>
+            </div>
+        </div>
+        <div class="content">
+            <div #timesElement class="times">
+                <div class="time" *ngFor="let time of times">
+                    <span>{{time}}</span>
                 </div>
             </div>
-            <div class="grid"></div>
+            <div class="timetable">
+                <div class="record {{(record.id < 0 && editMode ? 'empty' : '')}}" *ngFor="let record of lessons"
+                    [style.top]="record.calcTop + 'px'" [style.left]="record.calcLeft + 'px'"
+                    (click)="showDetails(record)">
+                    <div class="subject" *ngIf="record.id > 0">
+                        <span>{{record.name}}</span>
+                    </div>
+                    <div class="description" *ngIf="record.id > 0">
+                        <span>{{record.getFromToTime}}</span>
+                    </div>
+                    <div class="add-new-item" *ngIf="record.id < 0 && editMode">
+                        <img src="assets\images\icons8-add-new-80.png" (click)="addNewItem(record)">
+                    </div>
+                </div>
+            </div>
         </div>
+    </main>
+    <div class="arrow-right">
+        <img src="assets\images\icons8-arrow-pointing-left-64.png" (click)="nextWeek()">
     </div>
-    <div class="content">
-        <div #timesElement class="times">
-            <div class="time" *ngFor="let time of times">
-                <span>{{time}}</span>
-            </div>
-        </div>
-        <div class="timetable">
-            <div class="record" *ngFor="let record of lessons" [style.top]="record.calcTop + 'px'"
-                [style.left]="record.calcLeft + 'px'" (click)="showDetails(record)">
-                <div class="subject">
-                    <span>{{record.name}}</span>
-                </div>
-                <div class="description">
-                    <span>{{record.getFromToTime}}</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
+</div>
 
-<jw-modal id="lesson-details" [horizontalMargin]="'20%'">
-    <div>
+<jw-modal id="lesson-details" [horizontalMargin]="'20%'" (onclose)="closeMadal()">
+    <div *ngIf="editMode">
+        <div class="modal-header">
+            <input type="text" [(ngModel)]="detailsItem.name" placeholder="Назва">
+        </div>
+        <div class="modal-body">
+            <div>
+                <span>{{detailsItem.getFromToTime}} ({{detailsItem.duration}} хв)</span>
+            </div>
+            <div>
+                <span>Клас:</span>
+                <input type="text" [(ngModel)]="detailsItem.room">
+            </div>
+            <div>
+                <input type="text" [(ngModel)]="detailsItem.teacher" placeholder="Вчитель">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" (click)="saveLesson()">{{detailsItem.id > 0 ? 'Зберегти' :
+                    'Створити'}}</button>
+                <button class="btn btn-danger" *ngIf="detailsItem.id > 0" (click)="deleteLesson()">Видалити</button>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!editMode">
         <div class="modal-header">
             <h4 class="modal-title">{{detailsItem.name}}</h4>
         </div>
