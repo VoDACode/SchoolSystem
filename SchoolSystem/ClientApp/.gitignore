@@ -1,6 +1,6 @@
 .DS_STORE
 
-/.angular/cache
+*/.angular/cache/*
 /dist/
 /bazel-out
 /integration/bazel/bazel-*
