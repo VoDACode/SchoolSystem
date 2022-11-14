@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccsesLevel } from 'src/types/AccsesLevelType';
-import { StorageService } from '../services/storage.service';
+import { StorageService } from '../services/storage/storage.service';
 
 @Component({
   selector: 'app-timetable.page',

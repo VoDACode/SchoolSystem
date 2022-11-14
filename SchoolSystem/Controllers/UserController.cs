@@ -34,6 +34,7 @@ namespace SchoolSystem.Controllers
             });
             return Ok(parent);
         }
+
         [HttpGet("student/list")]
         public IActionResult GetStudentList()
         {

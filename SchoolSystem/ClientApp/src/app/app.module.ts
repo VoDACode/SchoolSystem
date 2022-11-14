@@ -14,6 +14,8 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { TimetableComponent } from './timetable/timetable.component';
 import { TimetablePageComponent } from './timetable.page/timetable.page.component';
 import { ModalModule } from './_modal';
+import { AdministrateUsersComponent } from './administrate.users/administrate.users.component';
+import { CreateFirstUserComponent } from './create-first-user/create-first-user.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { ModalModule } from './_modal';
     StudentHomeComponent,
     TimetableComponent,
     TimetablePageComponent,
+    AdministrateUsersComponent,
+    CreateFirstUserComponent,
   ],
   imports: [
     FormsModule,

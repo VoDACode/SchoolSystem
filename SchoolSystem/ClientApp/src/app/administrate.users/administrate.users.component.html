@@ -1,0 +1,92 @@
+<app-nav-menu></app-nav-menu>
+<main>
+    <div class="container">
+        <h1>Користувачі</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Прізвище</th>
+                    <th>Ім'я</th>
+                    <th>По батькові</th>
+                    <th>Пошта</th>
+                    <th>Телефон</th>
+                    <th>Роль</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" [(ngModel)]="newUser.surname" name="surname"
+                            placeholder="Прізвище">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" [(ngModel)]="newUser.name" name="name"
+                            placeholder="Ім'я">
+                    </td>
+                    <td>
+
+                        <input type="text" class="form-control" [(ngModel)]="newUser.name" name="name"
+                            placeholder="По батькові">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" [(ngModel)]="newUser.email" name="email" placeholder="Пошта">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" [(ngModel)]="newUser.phone" name="phone" placeholder="Телефон">
+                    </td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="newUser.accsesLevel">
+                            <option>STUDENT</option>
+                            <option>TEACHER</option>
+                            <option>PARENT</option>
+                            <option>ADMIN</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary" (click)="addNewUser()">Додати</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-danger">Очистити</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">ПІП</th>
+                    <th scope="col">Е-адреса</th>
+                    <th scope="col">Телкфон</th>
+                    <th scope="col">Логін</th>
+                    <th scope="col">Пароль</th>
+                    <th scope="col">Роль</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                    <th scope="row">{{user.id}}</th>
+                    <td>{{user.surname}} {{user.name}} {{user.middlename}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.phone}}</td>
+                    <td>{{user.login}}</td>
+                    <td>
+                        <button *ngIf="!user.canViewPassword" type="button" class="btn btn-primary"
+                            (click)="viewPassword(user)">View Password</button>
+                        {{user.canViewPassword ? user.password : ''}}
+                    </td>
+                    <td>{{user.accsesLevel}}</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-primary">Edit</button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-outline-danger">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>

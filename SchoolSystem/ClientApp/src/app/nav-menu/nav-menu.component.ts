@@ -7,7 +7,7 @@ import {
 } from '@angular/animations';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { NavItem } from 'src/models/NavItem';
-import { StorageService } from '../services/storage.service';
+import { StorageService } from '../services/storage/storage.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -54,7 +54,7 @@ export class NavMenuComponent {
       new NavItem('Дисципліни', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'icons8-discipline-64.png', '/discipline'),
       new NavItem('Класи', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'icons8-groups-64.png', '/my/group'),
       new NavItem('План занять', storage.accsesLevel == 'TEACHER' || storage.accsesLevel == 'ADMIN', 'icons8-what-i-do-48.png', '/my/plan'),
-      new NavItem('Користувачі', storage.accsesLevel == 'ADMIN', 'icons8-people-48.png', '/my/user'),
+      new NavItem('Користувачі', storage.accsesLevel == 'ADMIN', 'icons8-people-48.png', '/users'),
       new NavItem('Довідки', true, 'icons8-reference-64.png', '/reference'),
     ];
   }
