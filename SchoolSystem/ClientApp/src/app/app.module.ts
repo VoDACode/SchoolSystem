@@ -20,6 +20,7 @@ import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common
 import { Router } from '@angular/router';
 import { AuthInterceptor } from './services/AuthInterceptor';
 import { AuthGuard } from './services/AuthGuard';
+import { LogoutComponent } from './logout/logout.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { AuthGuard } from './services/AuthGuard';
     TimetablePageComponent,
     AdministrateUsersComponent,
     CreateFirstUserComponent,
+    LogoutComponent,
   ],
   imports: [
     FormsModule,

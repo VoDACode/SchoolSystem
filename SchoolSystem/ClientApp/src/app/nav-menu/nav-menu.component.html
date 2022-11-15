@@ -3,6 +3,7 @@
     <div class="open-menu-button">
       <img #openMenuButton src="assets\images\open-menu.png" (click)="toggle()" />
     </div>
+    <app-logout></app-logout>
   </header>
   <nav [@openClose]="isOpen ? 'open' : 'closed'" class="nav-menu">
     <div class="items">

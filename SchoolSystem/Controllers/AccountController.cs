@@ -32,13 +32,13 @@ namespace SchoolSystem.Controllers
             }
             string userRole = "";
             if (DB.Students.Any(p => p.User_Id == user.Id))
-                userRole = "Student";
+                userRole = "STUDENT";
             else if (DB.Admins.Any(p => p.User.Id == user.Id))
-                userRole = "Admin";
+                userRole = "ADMIN";
             else if (DB.Teachers.Any(p => p.User_Id == user.Id))
-                userRole = "Teacher";
+                userRole = "TEACHER";
             else if (DB.Parents.Any(p => p.User_Id == user.Id))
-                userRole = "Parent";
+                userRole = "PARENT";
             var claims = new List<Claim>() {
                     new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id)),
                     new Claim(ClaimTypes.Name, user.Login),

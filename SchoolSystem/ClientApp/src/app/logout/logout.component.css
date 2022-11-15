@@ -1,0 +1,10 @@
+.box img {
+  width: 45px;
+  height: 45px;
+  opacity: 0.5;
+}
+
+.box img:hover {
+  opacity: 1;
+  cursor: pointer;
+}
