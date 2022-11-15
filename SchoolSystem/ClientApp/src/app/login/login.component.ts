@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { environment } from 'src/environments/environment.prod';
 import { LoginData } from 'src/models/LoginData';
 
 @Component({
@@ -20,7 +21,25 @@ export class LoginComponent {
   }
 
   loginEvent(): void {
-    //@ts-ignore
-    this.errorElement.nativeElement.innerText = "Incorrect login or password.";
+    fetch('/api/accaunt/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.model)
+    }).then(response => {
+      if (response.status === 200) {
+        window.location.href = '/home';
+      } else {
+        //@ts-ignore
+        this.errorElement.nativeElement.innerText = "Login failed";
+      }
+    }).catch(error => {
+      //@ts-ignore
+      this.errorElement.nativeElement.innerText = "Login failed";
+      if (environment.debug) {
+        console.error(`Login failed: ${error}`);
+      }
+    });
   }
 }

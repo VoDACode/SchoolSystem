@@ -1,4 +1,4 @@
 export class LoginData {
-  public password: string = "";
-  public login: string = "";
+  public Password: string = "";
+  public Login: string = "";
 }

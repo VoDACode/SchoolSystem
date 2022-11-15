@@ -1,14 +1,14 @@
 <div class="content">
   <div class="input-control">
     <input type="text" class="form-control" (keydown)="onChangeInput()" placeholder="Login" required
-      [(ngModel)]="model.login" />
+      [(ngModel)]="model.Login" />
   </div>
   <div class="input-control">
     <span #error class="error-message"></span>
   </div>
   <div class="input-control">
     <input type="password" class="form-control" (keydown)="onChangeInput()" placeholder="Password" required
-      [(ngModel)]="model.password" />
+      [(ngModel)]="model.Password" />
   </div>
   <div class="input-control relative">
     <button class="vertical-center" (click)="loginEvent()">Login</button>
