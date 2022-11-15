@@ -28,7 +28,7 @@ namespace SchoolSystem
             : base(options)
         {
             Database.EnsureCreated();
-            addedTest_users();
+            //addedTest_users();
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

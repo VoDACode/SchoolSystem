@@ -1,11 +1,11 @@
 export class FirstUserModel {
-    public firstName: string = "";
-    public lastName: string = "";
-    public middleName: string | undefined;
-    public birthDate: Date = new Date();
-    public phone: string = "";
-    public login: string = "";
-    public email: string = "";
-    public password: string = "";
-    public passwordConfirm: string = "";
+    public FirstName: string = "";
+    public LastName: string = "";
+    public MiddleName: string | undefined;
+    public BirthDate: Date = new Date();
+    public Phone: string = "";
+    public Login: string = "";
+    public Email: string = "";
+    public Password: string = "";
+    public PasswordConfirm: string = "";
 }

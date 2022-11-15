@@ -51,60 +51,76 @@ export class CreateFirstUserComponent implements AfterViewInit {
     this.loginError!.nativeElement.innerHTML = '';
     this.passwordError!.nativeElement.innerHTML = '';
 
-    if (this.model.firstName == undefined || this.model.firstName.length < 2) {
+    if (this.model.FirstName == undefined || this.model.FirstName.length < 2) {
       this.firstNameError!.nativeElement.innerHTML = "Ім'я не може бути коротшим за 2 символи";
       valid = false;
     }
-    if (this.model.lastName == undefined || this.model.lastName.length < 2) {
+    if (this.model.LastName == undefined || this.model.LastName.length < 2) {
       this.lastNameError!.nativeElement.innerHTML = "Прізвище не може бути коротшим за 2 символ";
       valid = false;
     }
-    if (this.model.middleName !== undefined && (this.model.middleName?.length != 0 && (this.model.middleName?.length || 0) < 2)) {
+    if (this.model.MiddleName !== undefined && (this.model.MiddleName?.length != 0 && (this.model.MiddleName?.length || 0) < 2)) {
       this.middleNameError!.nativeElement.innerHTML = "По батькові не може бути коротшим за 2 символи";
       valid = false;
     }
-    if (this.model.phone == undefined || this.phoneRegExp.test(this.model.phone) == false) {
+    if (this.model.Phone == undefined || this.phoneRegExp.test(this.model.Phone) == false) {
       this.phoneError!.nativeElement.innerHTML = "Не вірний формат номеру телефону (Приклад: +380123456789)";
       valid = false;
     }
-    if (this.model.email == undefined || this.emailRegExp.test(this.model.email) == false) {
+    if (this.model.Email == undefined || this.emailRegExp.test(this.model.Email) == false) {
       this.emailError!.nativeElement.innerHTML = "Не вірний формат електронної пошти (Приклад: email@example.com)";
       valid = false;
     }
-    if (this.model.login == undefined) {
+    if (this.model.Login == undefined) {
       this.loginError!.nativeElement.innerHTML = "Логін не може бути пустим";
       valid = false;
-    } else if (this.model.login.length < 3) {
+    } else if (this.model.Login.length < 3) {
       this.loginError!.nativeElement.innerHTML = "Логін не може бути коротшим за 4 символи";
       valid = false;
     }
 
-    if (this.model.password == undefined || this.model.password.length == 0) {
+    if (this.model.Password == undefined || this.model.Password.length == 0) {
       this.passwordError!.nativeElement.innerHTML = "Пароль не може бути пустим";
       valid = false;
-    } else if (this.model.password.length < 8) {
+    } else if (this.model.Password.length < 8) {
       this.passwordError!.nativeElement.innerHTML = "Пароль не може бути коротшим за 8 символів";
       valid = false;
-    } else if (this.model.password != this.model.passwordConfirm) {
+    } else if (this.model.Password != this.model.PasswordConfirm) {
       this.passwordError!.nativeElement.innerHTML = "Паролі не співпадають";
       valid = false;
     }
 
     if (valid) {
-      console.log(this.model);
+      fetch('/api/sys/create-admin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(this.model)
+      }).then(response => {
+        if (response.ok) {
+          window.location.href = '/login';
+        } else {
+          response.json().then(data => {
+            alert(data.message);
+          });
+        }
+      }).catch(error => {
+        alert(error);
+      });
     }
   }
 
   onChangeEmail(): void {
     this.emailError!.nativeElement.innerHTML = '';
-    if (this.model.email == undefined || this.emailRegExp.test(this.model.email) == false) {
+    if (this.model.Email == undefined || this.emailRegExp.test(this.model.Email) == false) {
       this.emailError!.nativeElement.innerHTML = "Не вірний формат електронної пошти (Приклад: email@example.com)";
     }
   }
 
   onChangePhone(): void {
     this.phoneError!.nativeElement.innerHTML = '';
-    if (this.model.phone == undefined || this.phoneRegExp.test(this.model.phone) == false) {
+    if (this.model.Phone == undefined || this.phoneRegExp.test(this.model.Phone) == false) {
       this.phoneError!.nativeElement.innerHTML = "Не вірний формат номеру телефону (Приклад: +380123456789)";
     }
   }

@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.isFirstStart().then(x => {
-      if (x) {
+      if (x == false) {
         this.router.navigate(['/start']);
       }
     });

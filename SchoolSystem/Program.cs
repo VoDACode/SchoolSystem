@@ -14,7 +14,14 @@ builder.Services.AddDbContext<DbApp>(options =>
                options.UseSqlServer(connectionString));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(p => p.LoginPath = "/login");
+    .AddCookie(options =>
+                {
+                    options.Events.OnRedirectToLogin = (context) =>
+                    {
+                        context.Response.StatusCode = 401;
+                        return Task.CompletedTask;
+                    };
+                });
 
 var app = builder.Build();
 
@@ -30,12 +37,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 
-app.UseAuthorization();
 app.UseAuthentication();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+app.UseAuthorization();
+app.MapDefaultControllerRoute();
 
 app.MapFallbackToFile("index.html");
 

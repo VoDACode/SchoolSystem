@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
 import { LoginData } from 'src/models/LoginData';
 
@@ -13,7 +14,7 @@ export class LoginComponent {
 
   model: LoginData = new LoginData();
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   onChangeInput(): void {
     //@ts-ignore
@@ -21,7 +22,7 @@ export class LoginComponent {
   }
 
   loginEvent(): void {
-    fetch('/api/accaunt/login', {
+    fetch('/api/account/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -29,7 +30,7 @@ export class LoginComponent {
       body: JSON.stringify(this.model)
     }).then(response => {
       if (response.status === 200) {
-        window.location.href = '/home';
+        this.router.navigate(['home']);
       } else {
         //@ts-ignore
         this.errorElement.nativeElement.innerText = "Login failed";

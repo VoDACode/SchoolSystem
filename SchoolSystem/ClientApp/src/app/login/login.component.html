@@ -10,6 +10,10 @@
     <input type="password" class="form-control" (keydown)="onChangeInput()" placeholder="Password" required
       [(ngModel)]="model.Password" />
   </div>
+  <div class="input-control form-check form-switch">
+    <input class="form-check-input" type="checkbox" [(ngModel)]="model.RememberLogin" id="flexSwitchCheckDefault">
+    <label class="form-check-label" for="flexSwitchCheckDefault">Remember me</label>
+  </div>
   <div class="input-control relative">
     <button class="vertical-center" (click)="loginEvent()">Login</button>
   </div>

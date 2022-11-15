@@ -16,6 +16,10 @@ import { TimetablePageComponent } from './timetable.page/timetable.page.componen
 import { ModalModule } from './_modal';
 import { AdministrateUsersComponent } from './administrate.users/administrate.users.component';
 import { CreateFirstUserComponent } from './create-first-user/create-first-user.component';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AuthInterceptor } from './services/AuthInterceptor';
+import { AuthGuard } from './services/AuthGuard';
 
 @NgModule({
   declarations: [
@@ -37,8 +41,19 @@ import { CreateFirstUserComponent } from './create-first-user/create-first-user.
     AppRoutingModule,
     BrowserAnimationsModule,
     ModalModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useFactory: function (router: Router) {
+        return new AuthInterceptor(router);
+      },
+      multi: true,
+      deps: [Router]
+    },
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
