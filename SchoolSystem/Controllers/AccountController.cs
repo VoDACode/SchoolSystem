@@ -30,19 +30,10 @@ namespace SchoolSystem.Controllers
             {
                 return Unauthorized(new Response(false, "Invalid login or password"));
             }
-            string userRole = "";
-            if (DB.Students.Any(p => p.User_Id == user.Id))
-                userRole = "STUDENT";
-            else if (DB.Admins.Any(p => p.User.Id == user.Id))
-                userRole = "ADMIN";
-            else if (DB.Teachers.Any(p => p.User_Id == user.Id))
-                userRole = "TEACHER";
-            else if (DB.Parents.Any(p => p.User_Id == user.Id))
-                userRole = "PARENT";
             var claims = new List<Claim>() {
                     new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id)),
                     new Claim(ClaimTypes.Name, user.Login),
-                    new Claim(ClaimTypes.Role, userRole)
+                    new Claim(ClaimTypes.Role, user.Role)
             };
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);

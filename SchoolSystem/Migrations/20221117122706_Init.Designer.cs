@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolSystem;
 
@@ -11,9 +12,11 @@ using SchoolSystem;
 namespace SchoolSystem.Migrations
 {
     [DbContext(typeof(DbApp))]
-    partial class DbAppModelSnapshot : ModelSnapshot
+    [Migration("20221117122706_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,9 +88,18 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.Admin", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("UserForeignKey")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserForeignKey")
+                        .IsUnique();
 
                     b.ToTable("Admins");
                 });
@@ -379,16 +391,25 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.Parent", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("parent_email");
 
+                    b.Property<int>("UserForeignKey")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("UserForeignKey")
                         .IsUnique();
 
                     b.ToTable("Parents");
@@ -453,7 +474,10 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.Student", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Area")
                         .HasMaxLength(64)
@@ -507,7 +531,13 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasColumnName("student_type");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Students");
                 });
@@ -515,7 +545,10 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.Teacher", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateEndWork")
                         .HasColumnType("datetime2")
@@ -525,7 +558,13 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("date_start_work");
 
+                    b.Property<int>("UserForeignKey")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserForeignKey")
+                        .IsUnique();
 
                     b.ToTable("Teachers");
                 });
@@ -712,7 +751,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.User", "User")
                         .WithOne("Admin")
-                        .HasForeignKey("SchoolSystem.DataModels.Admin", "Id")
+                        .HasForeignKey("SchoolSystem.DataModels.Admin", "UserForeignKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -871,7 +910,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.User", "User")
                         .WithOne("Parent")
-                        .HasForeignKey("SchoolSystem.DataModels.Parent", "Id")
+                        .HasForeignKey("SchoolSystem.DataModels.Parent", "UserForeignKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -912,7 +951,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.User", "User")
                         .WithOne("Student")
-                        .HasForeignKey("SchoolSystem.DataModels.Student", "Id")
+                        .HasForeignKey("SchoolSystem.DataModels.Student", "UserId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
@@ -923,7 +962,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.User", "User")
                         .WithOne("Teacher")
-                        .HasForeignKey("SchoolSystem.DataModels.Teacher", "Id")
+                        .HasForeignKey("SchoolSystem.DataModels.Teacher", "UserForeignKey")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

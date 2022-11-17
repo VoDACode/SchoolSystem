@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolSystem;
 
@@ -11,9 +12,11 @@ using SchoolSystem;
 namespace SchoolSystem.Migrations
 {
     [DbContext(typeof(DbApp))]
-    partial class DbAppModelSnapshot : ModelSnapshot
+    [Migration("20221117111326_AddedRefUserRoleToUserFixIdError")]
+    partial class AddedRefUserRoleToUserFixIdError
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,13 +82,16 @@ namespace SchoolSystem.Migrations
 
                     b.HasIndex("StudentsId");
 
-                    b.ToTable("ParentStudent", (string)null);
+                    b.ToTable("ParentStudent");
                 });
 
             modelBuilder.Entity("SchoolSystem.DataModels.Admin", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.HasKey("Id");
 
@@ -379,7 +385,10 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.Parent", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -453,7 +462,10 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.Student", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Area")
                         .HasMaxLength(64)
@@ -515,7 +527,10 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.Teacher", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateEndWork")
                         .HasColumnType("datetime2")
@@ -533,11 +548,8 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("user_id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Birthday")
                         .HasColumnType("datetime2")
@@ -708,17 +720,6 @@ namespace SchoolSystem.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SchoolSystem.DataModels.Admin", b =>
-                {
-                    b.HasOne("SchoolSystem.DataModels.User", "User")
-                        .WithOne("Admin")
-                        .HasForeignKey("SchoolSystem.DataModels.Admin", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SchoolSystem.DataModels.ControlMark", b =>
                 {
                     b.HasOne("SchoolSystem.DataModels.Discipline", "Discipline")
@@ -867,17 +868,6 @@ namespace SchoolSystem.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("SchoolSystem.DataModels.Parent", b =>
-                {
-                    b.HasOne("SchoolSystem.DataModels.User", "User")
-                        .WithOne("Parent")
-                        .HasForeignKey("SchoolSystem.DataModels.Parent", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("SchoolSystem.DataModels.Rating", b =>
                 {
                     b.HasOne("SchoolSystem.DataModels.Teacher", "Teacher")
@@ -908,26 +898,39 @@ namespace SchoolSystem.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("SchoolSystem.DataModels.Student", b =>
+            modelBuilder.Entity("SchoolSystem.DataModels.User", b =>
                 {
-                    b.HasOne("SchoolSystem.DataModels.User", "User")
-                        .WithOne("Student")
-                        .HasForeignKey("SchoolSystem.DataModels.Student", "Id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("SchoolSystem.DataModels.Teacher", b =>
-                {
-                    b.HasOne("SchoolSystem.DataModels.User", "User")
-                        .WithOne("Teacher")
-                        .HasForeignKey("SchoolSystem.DataModels.Teacher", "Id")
+                    b.HasOne("SchoolSystem.DataModels.Admin", "Admin")
+                        .WithOne("User")
+                        .HasForeignKey("SchoolSystem.DataModels.User", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.HasOne("SchoolSystem.DataModels.Parent", "Parent")
+                        .WithOne("User")
+                        .HasForeignKey("SchoolSystem.DataModels.User", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolSystem.DataModels.Student", "Student")
+                        .WithOne("User")
+                        .HasForeignKey("SchoolSystem.DataModels.User", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolSystem.DataModels.Teacher", "Teacher")
+                        .WithOne("User")
+                        .HasForeignKey("SchoolSystem.DataModels.User", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("SchoolSystem.DataModels.Visitation", b =>
@@ -968,9 +971,21 @@ namespace SchoolSystem.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("SchoolSystem.DataModels.Admin", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SchoolSystem.DataModels.Homework", b =>
                 {
                     b.Navigation("MarkHomeworks");
+                });
+
+            modelBuilder.Entity("SchoolSystem.DataModels.Parent", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SchoolSystem.DataModels.Rating", b =>
@@ -978,15 +993,16 @@ namespace SchoolSystem.Migrations
                     b.Navigation("Groups");
                 });
 
-            modelBuilder.Entity("SchoolSystem.DataModels.User", b =>
+            modelBuilder.Entity("SchoolSystem.DataModels.Student", b =>
                 {
-                    b.Navigation("Admin");
+                    b.Navigation("User")
+                        .IsRequired();
+                });
 
-                    b.Navigation("Parent");
-
-                    b.Navigation("Student");
-
-                    b.Navigation("Teacher");
+            modelBuilder.Entity("SchoolSystem.DataModels.Teacher", b =>
+                {
+                    b.Navigation("User")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

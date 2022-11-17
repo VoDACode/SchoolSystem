@@ -1,3 +1,4 @@
+import { StorageService } from './../services/storage/storage.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
@@ -9,7 +10,7 @@ import { environment } from 'src/environments/environment.prod';
 })
 export class LogoutComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private storage: StorageService) { }
 
   ngOnInit(): void {
   }
@@ -23,6 +24,7 @@ export class LogoutComponent implements OnInit {
     }).then(response => {
       if (response.status === 200) {
         this.router.navigate(['auth', 'login']);
+        this.storage.clear();
       }
     }).catch(error => {
       if (environment.debug) {

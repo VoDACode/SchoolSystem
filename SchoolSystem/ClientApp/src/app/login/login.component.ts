@@ -1,7 +1,13 @@
+import { AuthService } from './../services/auth/auth.service';
+import { StorageService } from './../services/storage/storage.service';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
 import { LoginData } from 'src/models/LoginData';
+import { UserClaim } from 'src/interfaces/ApiResponses';
+import { map } from 'rxjs';
+import { AccsesLevel } from 'src/types/AccsesLevelType';
+import { ClaimTypes } from 'src/types/ClaimTypes';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +20,7 @@ export class LoginComponent {
 
   model: LoginData = new LoginData();
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private storage: StorageService, private auth: AuthService) { }
 
   onChangeInput(): void {
     //@ts-ignore
@@ -30,6 +36,13 @@ export class LoginComponent {
       body: JSON.stringify(this.model)
     }).then(response => {
       if (response.status === 200) {
+        setTimeout(() => {
+          this.auth.user().subscribe(res => {
+            if (res.success) {
+              this.storage.accsesLevel = res.data!.find(p => p.type == ClaimTypes.Role)?.value as AccsesLevel;
+            }
+          });
+        }, 200);
         this.router.navigate(['home']);
       } else {
         //@ts-ignore

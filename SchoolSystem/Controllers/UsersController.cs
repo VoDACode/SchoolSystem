@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolSystem.DataModels;
@@ -17,6 +18,13 @@ namespace SchoolSystem.Controllers
             DB = db;
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
+        [HttpGet]
+        public async Task<IActionResult> GetUsersList()
+        {
+            var users = await DB.Users.ToListAsync();
+            return Ok(users);
+        }
         
     }
 }

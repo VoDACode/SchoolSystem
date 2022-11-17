@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { UserClaim } from 'src/interfaces/ApiResponses';
+import { BaseResponse } from 'src/types/BaseResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -19,14 +20,13 @@ export class AuthService {
     return this.http.get('api/account/logout');
   }
   public user() {
-    return this.http.get<UserClaim[]>('api/account/user');
+    return this.http.get<BaseResponse<UserClaim[]>>('api/account/user');
   }
   public isLogedIn(): Observable<boolean> {
     return this.user().pipe(
-      map((userClaims) => {
-        console.log(userClaims);
-        const hasClaims = userClaims.length > 0;
-        return hasClaims ? false : true;
+      map((res) => {
+        const hasClaims = res.data!.length > 0;
+        return !hasClaims ? false : true;
       }),
       catchError((error) => {
         console.error(error);

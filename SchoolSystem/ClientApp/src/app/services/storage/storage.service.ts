@@ -8,7 +8,9 @@ export class StorageService {
 
   private static _accsesLevel: AccsesLevel = 'ADMIN';
 
-  constructor() { }
+  constructor() {
+    StorageService._accsesLevel = localStorage.getItem('accsesLevel') as AccsesLevel;
+  }
 
   get accsesLevel(): AccsesLevel {
     return StorageService._accsesLevel;
@@ -16,5 +18,10 @@ export class StorageService {
 
   set accsesLevel(value: AccsesLevel) {
     StorageService._accsesLevel = value;
+    localStorage.setItem('accsesLevel', value);
+  }
+
+  public clear(): void {
+    localStorage.clear();
   }
 }

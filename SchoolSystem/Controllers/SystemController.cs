@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SchoolSystem.DataModels;
 using SchoolSystem.Requests;
 using SchoolSystem.Responses;
@@ -57,6 +58,7 @@ namespace SchoolSystem.Controllers
             user = (await DB.Users.AddAsync(user)).Entity;
             await DB.Admins.AddAsync(new Admin { User = user });
             await DB.SaveChangesAsync();
+
             return Ok(new Response(true, "Admin created"));
         }
     }

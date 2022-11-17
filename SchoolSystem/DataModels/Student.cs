@@ -5,8 +5,8 @@ namespace SchoolSystem.DataModels
 {
     public class Student
     {
-        [Column("student_id")]
-        public int User_Id { get; set; }
+        public int Id { get; set; }
+
         [Required]
         [Column("date_of_entry")]
         public DateTime DateOfEntry { get; set; }
@@ -41,10 +41,9 @@ namespace SchoolSystem.DataModels
         [Column("flat_numder")]
         public int? Flat { get; set; }
 
-        public List<Parent>? Parents { get; set; } = new();
+        public ICollection<Parent>? Parents { get; set; }
 
         public List<Group>? Groups { get; set; } = new();
-
-        public User? User { get; set; }
+        public User User { get; set; }
     }
 }

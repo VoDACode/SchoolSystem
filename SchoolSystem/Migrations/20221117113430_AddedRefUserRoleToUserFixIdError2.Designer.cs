@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolSystem;
 
@@ -11,9 +12,11 @@ using SchoolSystem;
 namespace SchoolSystem.Migrations
 {
     [DbContext(typeof(DbApp))]
-    partial class DbAppModelSnapshot : ModelSnapshot
+    [Migration("20221117113430_AddedRefUserRoleToUserFixIdError2")]
+    partial class AddedRefUserRoleToUserFixIdError2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,12 +30,12 @@ namespace SchoolSystem.Migrations
                     b.Property<string>("DisciplinesDiscipline_Code")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("TeachersId")
+                    b.Property<int>("TeachersUserID")
                         .HasColumnType("int");
 
-                    b.HasKey("DisciplinesDiscipline_Code", "TeachersId");
+                    b.HasKey("DisciplinesDiscipline_Code", "TeachersUserID");
 
-                    b.HasIndex("TeachersId");
+                    b.HasIndex("TeachersUserID");
 
                     b.ToTable("DisciplineTeacher");
                 });
@@ -57,37 +60,37 @@ namespace SchoolSystem.Migrations
                     b.Property<string>("GroupsGroupCode")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("StudentsId")
+                    b.Property<int>("StudentsUserID")
                         .HasColumnType("int");
 
-                    b.HasKey("GroupsGroupCode", "StudentsId");
+                    b.HasKey("GroupsGroupCode", "StudentsUserID");
 
-                    b.HasIndex("StudentsId");
+                    b.HasIndex("StudentsUserID");
 
                     b.ToTable("GroupStudent");
                 });
 
             modelBuilder.Entity("ParentStudent", b =>
                 {
-                    b.Property<int>("ParentsId")
+                    b.Property<int>("ParentsUserID")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentsId")
+                    b.Property<int>("StudentsUserID")
                         .HasColumnType("int");
 
-                    b.HasKey("ParentsId", "StudentsId");
+                    b.HasKey("ParentsUserID", "StudentsUserID");
 
-                    b.HasIndex("StudentsId");
+                    b.HasIndex("StudentsUserID");
 
-                    b.ToTable("ParentStudent", (string)null);
+                    b.ToTable("ParentStudent");
                 });
 
             modelBuilder.Entity("SchoolSystem.DataModels.Admin", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserID");
 
                     b.ToTable("Admins");
                 });
@@ -378,7 +381,7 @@ namespace SchoolSystem.Migrations
 
             modelBuilder.Entity("SchoolSystem.DataModels.Parent", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -386,7 +389,7 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasColumnName("parent_email");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserID");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -411,12 +414,12 @@ namespace SchoolSystem.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("TeacherId")
+                    b.Property<int>("TeacherUserID")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TeacherId");
+                    b.HasIndex("TeacherUserID");
 
                     b.ToTable("Ratings");
                 });
@@ -438,21 +441,21 @@ namespace SchoolSystem.Migrations
                     b.Property<int>("RatingId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentId")
+                    b.Property<int>("StudentUserID")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RatingId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentUserID");
 
                     b.ToTable("RatingVoices");
                 });
 
             modelBuilder.Entity("SchoolSystem.DataModels.Student", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.Property<string>("Area")
@@ -507,14 +510,14 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("nvarchar(128)")
                         .HasColumnName("student_type");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserID");
 
                     b.ToTable("Students");
                 });
 
             modelBuilder.Entity("SchoolSystem.DataModels.Teacher", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateEndWork")
@@ -525,7 +528,7 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("date_start_work");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserID");
 
                     b.ToTable("Teachers");
                 });
@@ -658,7 +661,7 @@ namespace SchoolSystem.Migrations
 
                     b.HasOne("SchoolSystem.DataModels.Teacher", null)
                         .WithMany()
-                        .HasForeignKey("TeachersId")
+                        .HasForeignKey("TeachersUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -688,7 +691,7 @@ namespace SchoolSystem.Migrations
 
                     b.HasOne("SchoolSystem.DataModels.Student", null)
                         .WithMany()
-                        .HasForeignKey("StudentsId")
+                        .HasForeignKey("StudentsUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -697,13 +700,13 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.Parent", null)
                         .WithMany()
-                        .HasForeignKey("ParentsId")
+                        .HasForeignKey("ParentsUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolSystem.DataModels.Student", null)
                         .WithMany()
-                        .HasForeignKey("StudentsId")
+                        .HasForeignKey("StudentsUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -712,7 +715,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.User", "User")
                         .WithOne("Admin")
-                        .HasForeignKey("SchoolSystem.DataModels.Admin", "Id")
+                        .HasForeignKey("SchoolSystem.DataModels.Admin", "UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -871,7 +874,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.User", "User")
                         .WithOne("Parent")
-                        .HasForeignKey("SchoolSystem.DataModels.Parent", "Id")
+                        .HasForeignKey("SchoolSystem.DataModels.Parent", "UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -882,7 +885,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.Teacher", "Teacher")
                         .WithMany()
-                        .HasForeignKey("TeacherId")
+                        .HasForeignKey("TeacherUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -899,7 +902,7 @@ namespace SchoolSystem.Migrations
 
                     b.HasOne("SchoolSystem.DataModels.Student", "Student")
                         .WithMany()
-                        .HasForeignKey("StudentId")
+                        .HasForeignKey("StudentUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -912,8 +915,8 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.User", "User")
                         .WithOne("Student")
-                        .HasForeignKey("SchoolSystem.DataModels.Student", "Id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("SchoolSystem.DataModels.Student", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -923,7 +926,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.User", "User")
                         .WithOne("Teacher")
-                        .HasForeignKey("SchoolSystem.DataModels.Teacher", "Id")
+                        .HasForeignKey("SchoolSystem.DataModels.Teacher", "UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -33,10 +33,37 @@ namespace SchoolSystem
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Student>().HasKey(p => p.User_Id);
-            builder.Entity<Parent>().HasKey(p => p.User_Id);
+            builder.Entity<Parent>()
+                .HasMany(p => p.Students)
+                .WithMany(p => p.Parents)
+                .UsingEntity(p => p.ToTable("ParentStudent"));
+
+            builder.Entity<User>()
+                .HasOne(x => x.Student)
+                .WithOne(x => x.User)
+                .HasForeignKey<Student>(x => x.Id)
+                .OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<User>()
+                .HasOne(x => x.Teacher)
+                .WithOne(x => x.User)
+                .HasForeignKey<Teacher>(x => x.Id);
+            builder.Entity<User>()
+                .HasOne(x => x.Admin)
+                .WithOne(x => x.User)
+                .HasForeignKey<Admin>(x => x.Id);
+            builder.Entity<User>()
+                .HasOne(x => x.Parent)
+                .WithOne(x => x.User)
+                .HasForeignKey<Parent>(x => x.Id);
+
+            builder.Entity<User>().HasKey(p => p.Id);
+
+            builder.Entity<User>()
+                .Property(p => p.Id)
+                .ValueGeneratedOnAdd();
+
+
             builder.Entity<Parent>().HasIndex(u => u.Email).IsUnique();
-            builder.Entity<Teacher>().HasKey(p => p.User_Id);
             builder.Entity<Group>().HasKey(p => p.GroupCode);
             builder.Entity<Discipline>().HasKey(p => p.Discipline_Code);
             builder.Entity<MarkHomework>().HasKey(p => new { p.StudentId, p.HomeworkId });
@@ -48,63 +75,5 @@ namespace SchoolSystem
             base.OnModelCreating(builder);
         }
 
-        private void addedTest_users()
-        {
-            var random = new Random();
-            if (!Users.Any())
-            {
-                for (int i = 0; i < 120; i++)
-                {
-                    User user = Users.Add(new User()
-                    {
-                        Birthday = DateTime.Now - new TimeSpan(random.Next(1000000000)),
-                        FirstName = $"FirstName{i}",
-                        LastName = $"LastName{i}",
-                        MiddleName = random.Next(100) < 60 ? $"MiddleName{i}" : null,
-                        Login = $"Login{i}",
-                        Password = $"This is password[{i}]",
-                        PhoneNumber = random.NextInt64(9999999999999).ToString()
-                    }).Entity;
-                }
-                SaveChanges();
-            }
-            if (!Parents.Any())
-            {
-                for (int i = 1; i <= 40; i += 4)
-                {
-                    User user1 = Users.FirstOrDefault(p => p.Id == i);
-                    User user2 = Users.FirstOrDefault(p => p.Id == i + 1);
-                    var p1 = Parents.Add(new Parent()
-                    {
-                        Email = $"parent.1.email.{i}@example.com",
-                        User = user1
-                    }).Entity;
-                    var p2 = Parents.Add(new Parent()
-                    {
-                        Email = $"parent.2.email.{i + 1}@example.com",
-                        User = user2
-                    }).Entity;
-
-                    for (int s = 1; s <= 2; s++)
-                    {
-                        var obj = new Student()
-                        {
-                            House = random.Next(200).ToString(),
-                            Area = $"Area{s}",
-                            DateOfEntry = DateTime.Now,
-                            Country = "UA",
-                            Region = $"Region{s}",
-                            Settlement = $"Settlement{s}",
-                            Street = $"Street{s}",
-                            User = Users.FirstOrDefault(p => p.Id == i + 2 + s)
-                        };
-                        obj.Parents.Add(p1);
-                        obj.Parents.Add(p2);
-                        Student student = Students.Add(obj).Entity;
-                    }
-                }
-                SaveChanges();
-            }
-        }
     }
 }
