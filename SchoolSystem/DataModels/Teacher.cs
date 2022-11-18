@@ -10,7 +10,7 @@ namespace SchoolSystem.DataModels
         [Column("date_start_work")]
         public DateTime DateStartWork { get; set; }
         [Column("date_end_work")]
-        public DateTime DateEndWork { get; set; }
+        public DateTime? DateEndWork { get; set; }
         
         public User User { get; set; }
         public List<Discipline>? Disciplines { get; set; } = new();

@@ -14,7 +14,7 @@ export class ApiService {
       .then(data => data as User[]);
   }
 
-  public getUser(id: string): Promise<User> {
+  public getUser(id: number): Promise<User> {
     return fetch('/api/users/' + id)
       .then(response => response.json())
       .then(data => data as User);

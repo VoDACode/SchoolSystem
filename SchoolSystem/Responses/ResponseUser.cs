@@ -4,22 +4,19 @@ namespace SchoolSystem.Responses
 {
     public class ResponseUser : Response
     {
-        public ResponseUser(bool success, List<User> users) : base(success, "Users list")
+        public ResponseUser(bool success, User user) : base(success, "User model")
         {
-            Data = users.Select(p => 
-                new
-                {
-                    id = p.Id,
-                    p.FirstName,
-                    p.LastName,
-                    p.MiddleName,
-                    p.Birthday,
-                    p.PhoneNumber,
-                    p.Login,
-                    p.Email,
-                    role = p.Role
-                }
-            );;
+            Data = new
+            {
+                id = user.Id,
+                name = user.FirstName,
+                surname = user.LastName,
+                middlename = user.MiddleName,
+                phone = user.PhoneNumber,
+                login = user.Login,
+                email = user.Email,
+                accsesLevel = user.Role
+            };
         }
     }
 }

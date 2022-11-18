@@ -13,14 +13,14 @@ export class AdministrateUsersComponent implements OnInit {
 
   users: User[] = [];
 
-  newUser: User = new User('', '', '', '', '', '', '', 'STUDENT', false, new Date(), new Date());
+  newUser: User = new User(0, '', '', '', '', '', '', 'STUDENT');
 
   constructor(private router: Router, private storage: StorageService, private api: ApiService) { }
 
   ngOnInit(): void {
     if (this.storage.accsesLevel != 'ADMIN') {
       this.router.navigate(['/home']);
-    }else{
+    } else {
       this.api.getUsers().then(x => {
         this.users = x
       });
@@ -38,7 +38,7 @@ export class AdministrateUsersComponent implements OnInit {
   }
 
   clearUser(): void {
-    this.newUser = new User('', '', '', '', '', '', '', 'STUDENT', false, new Date(), new Date());
+    this.newUser = new User(0, '', '', '', '', '', '', 'STUDENT');
   }
 
 }

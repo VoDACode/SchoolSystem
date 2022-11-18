@@ -1,1 +1,1 @@
-export type AccsesLevel = 'ADMIN' | 'STUDENT' | 'TEACHER' | 'PARENT';
+export type AccsesLevel = 'ADMIN' | 'STUDENT' | 'TEACHER' | 'PARENT' | 'UNKNOWN';
