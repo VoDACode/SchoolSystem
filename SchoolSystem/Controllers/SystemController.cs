@@ -56,7 +56,8 @@ namespace SchoolSystem.Controllers
                 Password = request.Password,
             };
             user = (await DB.Users.AddAsync(user)).Entity;
-            await DB.Admins.AddAsync(new Admin { User = user });
+            var admin = (await DB.Admins.AddAsync(new Admin { User = user })).Entity;
+            user.Admin = admin;
             await DB.SaveChangesAsync();
 
             return Ok(new Response(true, "Admin created"));

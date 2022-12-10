@@ -6,19 +6,20 @@ namespace SchoolSystem.Responses
     {
         public ResponseUsersList(bool success, List<User> users) : base(success, "Users list")
         {
-            Data = users.Select(p => 
+            Data = users.Select(user =>
                 new
                 {
-                    id = p.Id,
-                    name = p.FirstName,
-                    surname = p.LastName,
-                    middlename = p.MiddleName,
-                    phone = p.PhoneNumber,
-                    login = p.Login,
-                    email = p.Email,
-                    accsesLevel = p.Role
+                    id = user.Id,
+                    firstname = user.FirstName,
+                    lastname = user.LastName,
+                    middlename = user.MiddleName,
+                    phone = user.PhoneNumber,
+                    login = user.Login,
+                    email = user.Email,
+                    birthDate = user.Birthday,
+                    accsesLevel = user.Role
                 }
-            );;
+            );
         }
     }
 }

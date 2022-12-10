@@ -21,6 +21,8 @@ import { Router } from '@angular/router';
 import { AuthInterceptor } from './services/AuthInterceptor';
 import { AuthGuard } from './services/AuthGuard';
 import { LogoutComponent } from './logout/logout.component';
+import { PageNavigatorComponent } from './page-navigator/page-navigator.component';
+import { DisciplineEditorComponent } from './discipline-editor/discipline-editor.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,8 @@ import { LogoutComponent } from './logout/logout.component';
     AdministrateUsersComponent,
     CreateFirstUserComponent,
     LogoutComponent,
+    PageNavigatorComponent,
+    DisciplineEditorComponent,
   ],
   imports: [
     FormsModule,

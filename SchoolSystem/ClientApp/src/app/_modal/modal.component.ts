@@ -13,6 +13,7 @@ export class ModalComponent implements OnInit, OnDestroy {
     @Input() id: string;
     @Input() viewCloseButton: boolean = true;
     @Input() horizontalMargin: string = "40px";
+    @Input() contentHorizontalCenter: boolean = false;
 
     @Output() onclose = new EventEmitter();
     private element: any;

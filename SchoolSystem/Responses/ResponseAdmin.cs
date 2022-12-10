@@ -2,9 +2,9 @@
 
 namespace SchoolSystem.Responses
 {
-    public class ResponseUser : Response
+    public class ResponseAdmin : Response
     {
-        public ResponseUser(bool success, User user) : base(success, "User model")
+        public ResponseAdmin(bool success, User user) : base(success, "Admin model")
         {
             Data = new
             {
@@ -12,8 +12,8 @@ namespace SchoolSystem.Responses
                 firstname = user.FirstName,
                 lastname = user.LastName,
                 middlename = user.MiddleName,
-                birthDate = user.Birthday,
                 phone = user.PhoneNumber,
+                birthDate = user.Birthday,
                 login = user.Login,
                 email = user.Email,
                 accsesLevel = user.Role

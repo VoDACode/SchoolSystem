@@ -1,0 +1,65 @@
+.container{
+    max-width: fit-content !important;
+}
+
+.input-forms {
+    max-width: 500px;
+}
+
+.input-object {
+    display: grid;
+    grid-template-rows: auto auto;
+    margin: 5px;
+    padding: 2px;
+}
+
+.input-object span {
+    font-size: 14px;
+}
+
+.box-relatives .items .item {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    --selected-color: #ccc;
+}
+
+.box-relatives .items .item.selected {
+    --selected-color: rgb(133, 255, 100) !important;
+    background-color: rgb(133, 255, 100);
+}
+
+.box-relatives .items .item:not(.selected):hover {
+    opacity: 0.8;
+    background-color: var(--selected-color);
+}
+
+.box-relatives .items .item.selected:hover {
+    opacity: 0.8;
+    background-color: var(--selected-color);
+}
+
+.container .header {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-gap: 10px;
+    margin-bottom: 10px;
+}
+
+.container .header .create-and-navigation {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.container .header .create-and-navigation .navigation {
+    height: 24px;
+}
+.navigation {
+    position: relative;
+}
+.navigation app-page-navigator {
+    position: absolute;
+    right: 0;
+}

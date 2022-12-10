@@ -3,8 +3,6 @@
     public class CreateStudentRequest : CreateUserRequest
     {
         public DateTime DateOfEntry { get; set; }
-        public DateTime? DateOfEnd { get; set; }
-        public string? Type { get; set; }
         public string Country { get; set; }
         public string Region { get; set; }
         public string? Area { get; set; }

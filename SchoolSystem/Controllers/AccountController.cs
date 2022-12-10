@@ -22,7 +22,7 @@ namespace SchoolSystem.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> PostLogin([FromBody]LoginRequest loginRequest)
+        public async Task<IActionResult> PostLogin([FromBody] LoginRequest loginRequest)
         {
             var user = await DB.Users.SingleOrDefaultAsync(p => p.Password == loginRequest.Password &&
                                                                 p.Login == loginRequest.Login);
@@ -30,6 +30,7 @@ namespace SchoolSystem.Controllers
             {
                 return Unauthorized(new Response(false, "Invalid login or password"));
             }
+            await user.InitRoles(DB);
             var claims = new List<Claim>() {
                     new Claim(ClaimTypes.NameIdentifier, Convert.ToString(user.Id)),
                     new Claim(ClaimTypes.Name, user.Login),

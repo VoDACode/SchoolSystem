@@ -6,7 +6,7 @@ import { AccsesLevel } from 'src/types/AccsesLevelType';
 })
 export class StorageService {
 
-  private static _accsesLevel: AccsesLevel = 'ADMIN';
+  private static _accsesLevel: AccsesLevel = AccsesLevel.UNKNOWN;
 
   constructor() {
     StorageService._accsesLevel = localStorage.getItem('accsesLevel') as AccsesLevel;

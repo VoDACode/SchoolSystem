@@ -1,0 +1,44 @@
+.content {
+    --image-size: 14px;
+    display: grid;
+    grid-template-columns: var(--image-size) var(--image-size) max-content var(--image-size) var(--image-size);
+}
+
+.right-arrow img {
+    transform: rotate(180deg);
+}
+
+.right-arrow,
+.left-arrow {
+    cursor: pointer;
+}
+
+.right-arrow:hover,
+.left-arrow:hover {
+    opacity: 0.5;
+}
+
+.right-arrow img,
+.left-arrow img {
+    width: var(--image-size);
+    height: var(--image-size);
+}
+
+.pages div:hover {
+    opacity: 0.8;
+    font-weight: 600;
+}
+
+.pages div {
+    position: relative;
+    display: inline-block;
+    min-width: 25px;
+    text-decoration: underline;
+    cursor: pointer;
+    text-align: center;
+}
+
+.pages div.selected {
+    font-weight: 600;
+    text-decoration: none;
+}

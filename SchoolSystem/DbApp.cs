@@ -62,8 +62,6 @@ namespace SchoolSystem
                 .Property(p => p.Id)
                 .ValueGeneratedOnAdd();
 
-
-            builder.Entity<Parent>().HasIndex(u => u.Email).IsUnique();
             builder.Entity<Group>().HasKey(p => p.GroupCode);
             builder.Entity<Discipline>().HasKey(p => p.Discipline_Code);
             builder.Entity<MarkHomework>().HasKey(p => new { p.StudentId, p.HomeworkId });

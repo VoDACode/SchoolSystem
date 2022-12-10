@@ -1,0 +1,19 @@
+<div class="content">
+    <div class="left-arrow" (click)="onFirst()">
+        <img src="assets/images/two-left-arrows-50.png" alt="left-arrow">
+    </div>
+    <div class="left-arrow" (click)="onPrevious()">
+        <img src="assets/images/one-left-arrow-50.png" alt="left-arrow">
+    </div>
+    <div class="pages">
+        <div *ngFor="let item of getPages" class="{{item == currentPage ? 'selected' : ''}}" (click)="onPageChange(item)">
+            <span>{{item}}</span>
+        </div>
+    </div>
+    <div class="right-arrow" (click)="onNext()">
+        <img src="assets/images/one-left-arrow-50.png" alt="left-arrow">
+    </div>
+    <div class="right-arrow" (click)="onLast()">
+        <img src="assets/images/two-left-arrows-50.png" alt="left-arrow">
+    </div>
+</div>

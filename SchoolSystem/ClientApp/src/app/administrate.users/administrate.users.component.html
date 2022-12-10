@@ -2,56 +2,22 @@
 <main>
     <div class="container">
         <h1>Користувачі</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Прізвище</th>
-                    <th>Ім'я</th>
-                    <th>По батькові</th>
-                    <th>Пошта</th>
-                    <th>Телефон</th>
-                    <th>Роль</th>
-                    <th>Дії</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <input type="text" class="form-control" [(ngModel)]="newUser.surname" name="surname"
-                            placeholder="Прізвище">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" [(ngModel)]="newUser.name" name="name"
-                            placeholder="Ім'я">
-                    </td>
-                    <td>
-
-                        <input type="text" class="form-control" [(ngModel)]="newUser.name" name="name"
-                            placeholder="По батькові">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" [(ngModel)]="newUser.email" name="email" placeholder="Пошта">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" [(ngModel)]="newUser.phone" name="phone" placeholder="Телефон">
-                    </td>
-                    <td>
-                        <select class="form-control" [(ngModel)]="newUser.accsesLevel">
-                            <option>STUDENT</option>
-                            <option>TEACHER</option>
-                            <option>PARENT</option>
-                            <option>ADMIN</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-outline-primary" (click)="addNewUser()">Додати</button>
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-outline-danger">Очистити</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="header">
+            <div>
+                <input type="text" placeholder="Пошук" [(ngModel)]="searchText" />
+                <button (click)="searchUsers()">Пошук</button>
+            </div>
+            <div class="create-and-navigation">
+                <div>
+                    <button type="button" class="btn btn-outline-primary" (click)="addNewUser()">Додати нового
+                        користувача</button>
+                </div>
+                <div class="navigation">
+                    <app-page-navigator [currentPage]="navigatorData.currentPage" [totalPages]="navigatorData.pageCount"
+                        [navigatorSize]="navigatorData.size"></app-page-navigator>
+                </div>
+            </div>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -62,31 +28,169 @@
                     <th scope="col">Логін</th>
                     <th scope="col">Пароль</th>
                     <th scope="col">Роль</th>
-                    <th scope="col">Edit</th>
-                    <th scope="col">Delete</th>
+                    <th scope="col">Редагувати</th>
+                    <th scope="col">Видалити</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let user of users">
                     <th scope="row">{{user.id}}</th>
-                    <td>{{user.surname}} {{user.name}} {{user.middlename}}</td>
+                    <td>{{user.lastname}} {{user.firstname}} {{user.middlename}}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.phone}}</td>
                     <td>{{user.login}}</td>
                     <td>
                         <button *ngIf="!user.canViewPassword" type="button" class="btn btn-primary"
-                            (click)="viewPassword(user)">View Password</button>
+                            (click)="viewPassword(user)">Показати пароль</button>
                         {{user.canViewPassword ? user.password : ''}}
                     </td>
                     <td>{{user.accsesLevel}}</td>
                     <td>
-                        <button type="button" class="btn btn-outline-primary">Edit</button>
+                        <button type="button" class="btn btn-outline-primary"
+                            (click)="editUser(user)">Редагувати</button>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-outline-danger">Delete</button>
+                        <button type="button" class="btn btn-outline-danger"
+                            (click)="deleteUser(user)">Видалити</button>
                     </td>
                 </tr>
             </tbody>
         </table>
+        <div class="navigation">
+            <app-page-navigator [currentPage]="navigatorData.currentPage" [totalPages]="navigatorData.pageCount"
+                [navigatorSize]="navigatorData.size"></app-page-navigator>
+        </div>
     </div>
 </main>
+
+<!--Create student-->
+
+<jw-modal id="student_editor" [viewCloseButton]="true" (onclose)="onCloseModal">
+    <div class="box" *ngIf="createStep == 0">
+        <div class="input-forms">
+            <div class="input-object" *ngIf="!editMode">
+                <span>Тип користувача</span>
+                <select [(ngModel)]="userInForm.accsesLevel">
+                    <option *ngFor="let item of accsesLevels" [value]="item" [disabled]="item == 'UNKNOWN'"
+                        [selected]="item == 'UNKNOWN'">
+                        {{item}}
+                    </option>
+                </select>
+            </div>
+            <div class="input-object">
+                <span>Прізвище</span>
+                <input type="text" [(ngModel)]="userInForm.lastname" placeholder="Прізвище">
+            </div>
+            <div class="input-object">
+                <span>Ім'я</span>
+                <input type="text" [(ngModel)]="userInForm.firstname" placeholder="Ім'я">
+            </div>
+            <div class="input-object">
+                <span>По батькові</span>
+                <input type="text" [(ngModel)]="userInForm.middlename" placeholder="По батькові">
+            </div>
+            <div class="input-object">
+                <span>Дата народження</span>
+                <input type="date" [value]="userInForm.birthDate | date:'yyyy-MM-dd'"
+                    (input)="userInForm.birthDate=parseDate($event)" placeholder="Дата народження">
+            </div>
+            <div class="input-object">
+                <span>Телефон</span>
+                <input type="phone" [(ngModel)]="userInForm.phone" placeholder="Телефон">
+            </div>
+            <div class="input-object">
+                <span>Електрона пошта</span>
+                <input type="email" [(ngModel)]="userInForm.email" placeholder="Електрона пошта">
+            </div>
+            <div class="input-object" *ngIf="editMode">
+                <button type="button" class="btn btn-primary" (click)="changePassword()">Змінити пароль</button>
+            </div>
+        </div>
+        <div class="buttons">
+            <button type="button"
+                *ngIf="userInForm.accsesLevel == 'STUDENT' || userInForm.accsesLevel == 'TEACHER' || userInForm.accsesLevel == 'PARENT'"
+                class="btn btn-primary" (click)="nextPage()">Далі</button>
+            <button type="button" *ngIf="editMode && (userInForm.accsesLevel == 'ADMIN')" class="btn btn-primary"
+                (click)="saveChanges()">Зберегти</button>
+            <button type="button" *ngIf="!editMode && (userInForm.accsesLevel == 'ADMIN')" class="btn btn-primary"
+                (click)="createUser()">Створити</button>
+        </div>
+    </div>
+    <div class="box" *ngIf="createStep == 1">
+        <div class="input-forms" *ngIf="userInForm.accsesLevel == 'STUDENT'">
+            <div class="input-object">
+                <span>Дата вступу</span>
+                <input type="date" [value]="dateStartWork | date:'yyyy-MM-dd'" (input)="dateStartWork=parseDate($event)"
+                    placeholder="Дата вступу">
+            </div>
+            <div class="input-object">
+                <span>Країна</span>
+                <input type="text" [(ngModel)]="address.country" placeholder="Країна">
+            </div>
+            <div class="input-object">
+                <span>Область</span>
+                <input type="text" [(ngModel)]="address.area" placeholder="Область">
+            </div>
+            <div class="input-object">
+                <span>Район</span>
+                <input type="text" [(ngModel)]="address.region" placeholder="Район">
+            </div>
+            <div class="input-object">
+                <span>Населений пункт</span>
+                <input type="text" [(ngModel)]="address.settlement" placeholder="Населений пункт">
+            </div>
+            <div class="input-object">
+                <span>Вулиця</span>
+                <input type="text" [(ngModel)]="address.street" placeholder="Вулиця">
+            </div>
+            <div class="input-object">
+                <span>Будинок</span>
+                <input type="text" [(ngModel)]="address.house" placeholder="Будинок">
+            </div>
+            <div class="input-object">
+                <span>Квартира</span>
+                <input type="number" [(ngModel)]="address.flat" placeholder="Квартира">
+            </div>
+        </div>
+        <div class="input-forms" *ngIf="userInForm.accsesLevel == 'TEACHER'">
+            <div class="input-object">
+                <span>Дата початку роботи</span>
+                <input type="date" [value]="dateStartWork | date:'yyyy-MM-dd'" (input)="dateStartWork=parseDate($event)"
+                    placeholder="Дата початку роботи">
+            </div>
+            <div class="input-object" *ngIf="editMode">
+                <span>Дата завершення роботи</span>
+                <input type="date" [value]="dateEndWork | date:'yyyy-MM-dd'" (input)="dateEndWork=parseDate($event)"
+                    placeholder="Дата завершення роботи">
+            </div>
+        </div>
+        <div class="input-forms"
+            *ngIf="(userInForm.accsesLevel == 'PARENT' || userInForm.accsesLevel == 'STUDENT') && editMode">
+            <div class="input-object">
+                <span>Перелк {{userInForm.accsesLevel == 'PARENT' ? 'дітей' : 'батьків'}}</span>
+                <div class="box-relatives">
+                    <div class="search">
+                        <input type="text" placeholder="Пошук..." [(ngModel)]="searchInModal">
+                        <button type="button" class="btn btn-primary" (click)="searchChange()">Знайти</button>
+                    </div>
+                    <div class="items">
+                        <div class="item{{item.selected == true? ' selected' : ''}}" *ngFor="let item of relativesList"
+                            (click)="selectRelative(item.id)">
+                            <div>
+                                <span>{{item.fullName}}</span>
+                            </div>
+                            <div>
+                                <span>{{item.birthDate | date:'dd.MM.yyyy'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <button type="button" class="btn btn-primary" (click)="prePage()">Назад</button>
+            <button type="button" class="btn btn-primary" (click)="createUser()" *ngIf="!editMode">Створити</button>
+            <button type="button" class="btn btn-primary" (click)="saveChanges()" *ngIf="editMode">Зберегти</button>
+        </div>
+    </div>
+</jw-modal>

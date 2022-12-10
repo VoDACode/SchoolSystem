@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolSystem.DataModels
@@ -41,7 +42,12 @@ namespace SchoolSystem.DataModels
         [Column("flat_numder")]
         public int? Flat { get; set; }
 
-        public ICollection<Parent>? Parents { get; set; }
+        public IList<Parent> Parents { get; set; } = new List<Parent>();
+
+        public async Task InitUser(DbApp DB)
+        {
+            User = await DB.Users.SingleAsync(u => u.Id == Id);
+        }
 
         public List<Group>? Groups { get; set; } = new();
         public User User { get; set; }
