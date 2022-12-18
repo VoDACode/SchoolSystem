@@ -6,9 +6,9 @@ import { User } from "./UserModel";
 export class Parent implements User {
     constructor(
         public id: number,
-        public firstname: string,
-        public lastname: string,
-        public middlename: string,
+        public firstName: string,
+        public lastName: string,
+        public middleName: string,
         public phone: string,
         public login: string,
         public email: string,

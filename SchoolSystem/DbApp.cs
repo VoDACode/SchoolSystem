@@ -63,12 +63,12 @@ namespace SchoolSystem
                 .ValueGeneratedOnAdd();
 
             builder.Entity<Group>().HasKey(p => p.GroupCode);
-            builder.Entity<Discipline>().HasKey(p => p.Discipline_Code);
+            builder.Entity<Discipline>().HasKey(p => p.DisciplineCode);
             builder.Entity<MarkHomework>().HasKey(p => new { p.StudentId, p.HomeworkId });
             builder.Entity<LessonType>().HasKey(p => p.TypeName);
             builder.Entity<Visitation>().HasKey(p => new { p.StudentId, p.LessonId });
             builder.Entity<MarkTypes>().HasKey(p => p.Type);
-            builder.Entity<ControlMark>().HasKey(p => new { p.StudentId, p.TeacherId, p.DisciplineCode, p.MarkType });
+            builder.Entity<ControlMark>().HasKey(p => new { p.StudentId, p.TeacherId, p.DisciplineCodeCode, p.MarkType });
             builder.Entity<MarkLesson>().HasKey(p => new { p.StudentId, p.LessonId });
             base.OnModelCreating(builder);
         }

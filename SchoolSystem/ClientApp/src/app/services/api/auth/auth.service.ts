@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { UserClaim } from 'src/interfaces/ApiResponses';
+import { LoginData } from 'src/models/LoginData';
 import { BaseResponse } from 'src/types/BaseResponse';
 
 @Injectable({
@@ -10,10 +11,15 @@ import { BaseResponse } from 'src/types/BaseResponse';
 export class AuthService {
   constructor(private http: HttpClient) { }
 
-  public logIn(email: string, password: string) {
-    return this.http.post<Response>('api/login/login', {
-      Email: email,
-      Password: password
+  public logIn(data: LoginData): Promise<BaseResponse<null>> {
+    return fetch('/api/account/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).then(response => {
+      return response.json() as Promise<BaseResponse<null>>;
     });
   }
   public logOut() {

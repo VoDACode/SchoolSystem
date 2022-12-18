@@ -1,0 +1,19 @@
+{
+  "name": "DatabaseFilling",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.29.0"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "@types/faker": "^6.6.9"
+  }
+}

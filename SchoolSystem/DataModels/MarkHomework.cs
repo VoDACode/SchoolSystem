@@ -10,11 +10,8 @@ namespace SchoolSystem.DataModels
         public Student Student { get; set; }
         public int AnswerFileId { get; set; }
         public File? AnswerFile { get; set; }
-        [Column("release_date")]
         public DateTime ReleaseDate { get; set; }
-        [Column("check_date")]
         public DateTime CheckDate { get; set; }
-        [Column("mark")]
         public float Mark { get; set; }
     }
 }

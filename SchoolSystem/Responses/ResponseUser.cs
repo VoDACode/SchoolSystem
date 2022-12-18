@@ -1,4 +1,5 @@
 ﻿using SchoolSystem.DataModels;
+using SchoolSystem.DataModels.View;
 
 namespace SchoolSystem.Responses
 {
@@ -6,18 +7,11 @@ namespace SchoolSystem.Responses
     {
         public ResponseUser(bool success, User user) : base(success, "User model")
         {
-            Data = new
-            {
-                id = user.Id,
-                firstname = user.FirstName,
-                lastname = user.LastName,
-                middlename = user.MiddleName,
-                birthDate = user.Birthday,
-                phone = user.PhoneNumber,
-                login = user.Login,
-                email = user.Email,
-                accsesLevel = user.Role
-            };
+            Data = new FullUserInfo(user);
+        }
+        public ResponseUser(bool success, IList<User> users) : base(success, "Users list")
+        {
+            Data = users.Select(user => new FullUserInfo(user));
         }
     }
 }

@@ -1,0 +1,38 @@
+.teachers .items .item {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    --selected-color: #ccc;
+}
+
+.teachers .items .item.selected {
+    --selected-color: rgb(133, 255, 100) !important;
+    background-color: rgb(133, 255, 100);
+}
+
+.teachers .items .item:not(.selected):hover {
+    opacity: 0.8;
+    background-color: var(--selected-color);
+}
+
+.teachers .items .item.selected:hover {
+    opacity: 0.8;
+    background-color: var(--selected-color);
+}
+
+.teachers .header > div{
+    display: inline-block;
+}
+
+.teachers .header input{
+    width: 300px;
+}
+
+input.form-control.is-invalid {
+    border-color: #dc3545;
+}
+.actions > button{
+    margin-left: 5px;
+}

@@ -1,29 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/models/UserModel';
-import { ApiService } from '../services/api/api.service';
+import { UsersApiService } from '../services/api/users.api/users.api.service';
 import { StorageService } from '../services/storage/storage.service';
 import { ModalService } from '../_modal';
 import { AccsesLevel } from '../../types/AccsesLevelType';
 import { Address } from 'src/models/AddressModel';
 import { BaseResponse } from 'src/types/BaseResponse';
 import { NavigatorData } from '../page-navigator/navgator-data';
+import { Discipline } from 'src/models/Discipline';
+import { DisciplineApiService } from '../services/api/discipline.api/discipline.api.service';
 
 @Component({
   selector: 'app-administrate-users',
   templateUrl: './administrate.users.component.html',
   styleUrls: ['./administrate.users.component.css']
 })
-export class AdministrateUsersComponent implements OnInit {
+export class AdministrateUsersComponent implements OnInit, AfterViewInit {
 
   editMode = false;
   users: User[] = [];
-
+  itemLimit = 25;
   createStep = 0;
 
-  navigatorData: NavigatorData = new NavigatorData(100, 50, 6);
+  navigatorData: NavigatorData = new NavigatorData(0, 0, 6);
 
   accsesLevels: string[] = Object.keys(AccsesLevel);
+
+  disciplines: DisciplineViewModel[] = [];
 
   relativesList: RelationshipsFromUserModel[] = [];
 
@@ -37,22 +41,45 @@ export class AdministrateUsersComponent implements OnInit {
 
   userInForm: User = new User(0, '', '', '', '', '', '', new Date(), AccsesLevel.STUDENT);
 
-  constructor(private router: Router, private storage: StorageService, private api: ApiService, private modalService: ModalService) { }
+  get getSearchText(): string | undefined {
+    return this.searchText.length > 0 ? this.searchText : undefined;
+  }
+
+  constructor(private router: Router,
+              private storage: StorageService,
+              private usersApi: UsersApiService,
+              private modalService: ModalService,
+              private disciplineApiService: DisciplineApiService) { }
+
+  ngAfterViewInit(): void {
+  }
 
   ngOnInit(): void {
     if (this.storage.accsesLevel != 'ADMIN') {
       this.router.navigate(['/home']);
     } else {
-      this.api.getUsers().then(x => {
-        if (!!x.data)
-          this.users = x.data;
+      this.usersApi.getUsers(1, this.itemLimit).then(x => {
+        if (!!x.data?.data){
+          this.users = x.data.data;
+          this.navigatorData = new NavigatorData(x.data.totalPages, x.data.page, 6);
+        }
       });
     }
     this.modalService.add('student_editor');
   }
 
+  onChangePage(page: number): void {
+    this.navigatorData.currentPage = page;
+    this.usersApi.getUsers(page, this.itemLimit,this.getSearchText).then(x => {
+      if (!!x.data?.data){
+        this.users = x.data.data;
+        this.navigatorData = new NavigatorData(x.data.totalPages, x.data.page, 6);
+      }
+    });
+  }
+
   viewPassword(user: User): void {
-    this.api.getPassword(user.id).then(x => {
+    this.usersApi.getPassword(user.id).then(x => {
       user.password = x.data || "";
       user.canViewPassword = true;
     });
@@ -83,9 +110,9 @@ export class AdministrateUsersComponent implements OnInit {
   createUser(): void {
     let url = `api/users/`;
     let obj: any = {
-      FirstName: this.userInForm.firstname,
-      LastName: this.userInForm.lastname,
-      MiddleName: this.userInForm.middlename,
+      FirstName: this.userInForm.firstName,
+      LastName: this.userInForm.lastName,
+      MiddleName: this.userInForm.middleName,
       BirthDate: this.userInForm.birthDate,
       Phone: this.userInForm.phone,
       Email: this.userInForm.email
@@ -128,17 +155,13 @@ export class AdministrateUsersComponent implements OnInit {
   }
 
   deleteUser(user: User): void {
-    fetch(`api/users/${user.id}`, {
-      method: 'DELETE'
-    }).then(responce => responce.json())
-      .then(data => {
-        let result = data as BaseResponse<null>;
-        if (result.success) {
-          this.users.splice(this.users.indexOf(user), 1);
-        } else {
-          alert(result.message);
-        }
-      })
+    this.usersApi.deleteUser(user.id).then(x => {
+      if (x.success) {
+        this.users.splice(this.users.indexOf(user), 1);
+      } else {
+        alert(x.message);
+      }
+    });
   }
 
   editUser(user: User): void {
@@ -146,14 +169,14 @@ export class AdministrateUsersComponent implements OnInit {
     this.relativesList = [];
     this.userInForm = user;
     if (user.accsesLevel == AccsesLevel.STUDENT) {
-      this.api.getStudent(user.id).then(x => {
+      this.usersApi.getStudent(user.id).then(x => {
         if (x.success && x.data) {
           this.userInForm = x.data;
           this.address = x.data.address;
           this.dateStartWork = new Date(x.data.dateOfEntry);
           this.userInForm.birthDate = new Date(x.data.birthDate);
           this.relativesList = x.data.parents?.map(p => new RelationshipsFromUserModel(p.id,
-            `${p.lastname} ${p.firstname}${(p.middlename !== undefined ? ' ' + p.middlename : '')}`
+            `${p.lastName} ${p.firstName}${(p.middleName !== undefined ? ' ' + p.middleName : '')}`
             , p.birthDate, true)) || [];
           this.loadRelativesList('PARENT');
           this.modalService.open('student_editor');
@@ -162,24 +185,35 @@ export class AdministrateUsersComponent implements OnInit {
         }
       });
     } else if (user.accsesLevel == AccsesLevel.TEACHER) {
-      this.api.getTeacher(user.id).then(x => {
+      this.usersApi.getTeacher(user.id).then(x => {
         if (x.success && x.data) {
           this.userInForm = x.data;
           this.dateStartWork = new Date(x.data.dateStartWork);
           this.dateEndWork = new Date(x.data.dateEndWork);
           this.userInForm.birthDate = new Date(x.data.birthDate);
+          this.loadTeacherDisciplines().then(() => {
+            this.disciplineApiService.getDisciplines().then(x => {
+              if (x.success && x.data) {
+                x.data.forEach(d => {
+                  if(this.disciplines.find(p => p.disciplineCode == d.disciplineCode) == undefined)
+                    this.disciplines.push(new DisciplineViewModel(d.disciplineCode, d.disciplineFullName, false));
+                });
+              }
+              this.disciplines.sort((a, b) => a.selected == b.selected ? 0 : a.selected ? -1 : 1)
+            });
+          });
           this.modalService.open('student_editor');
         } else {
           alert(x.message);
         }
       });
     } else if (user.accsesLevel == AccsesLevel.PARENT) {
-      this.api.getParent(user.id).then(x => {
+      this.usersApi.getParent(user.id).then(x => {
         if (x.success && x.data) {
           this.userInForm = x.data;
           this.userInForm.birthDate = new Date(x.data.birthDate);
           this.relativesList = x.data.children?.map(p => new RelationshipsFromUserModel(p.id,
-            `${p.lastname} ${p.firstname}${(p.middlename !== undefined ? ' ' + p.middlename : '')}`
+            `${p.lastName} ${p.firstName}${(p.middleName !== undefined ? ' ' + p.middleName : '')}`
             , p.birthDate, true)) || [];
           this.loadRelativesList('STUDENT');
           this.modalService.open('student_editor');
@@ -188,7 +222,7 @@ export class AdministrateUsersComponent implements OnInit {
         }
       });
     } else if (user.accsesLevel == AccsesLevel.ADMIN) {
-      this.api.getAdmin(user.id).then(x => {
+      this.usersApi.getAdmin(user.id).then(x => {
         if (x.success && x.data) {
           this.userInForm = x.data;
           this.userInForm.birthDate = new Date(x.data.birthDate);
@@ -198,6 +232,10 @@ export class AdministrateUsersComponent implements OnInit {
         }
       });
     }
+  }
+
+  selectDiscipline(discipline: DisciplineViewModel): void {
+    discipline.selected = !discipline.selected;
   }
 
   onCloseModal(): void {
@@ -210,19 +248,19 @@ export class AdministrateUsersComponent implements OnInit {
     console.log(this.userInForm);
     let url = `api/users/`;
     let obj: any = {
-      FirstName: this.userInForm.firstname,
-      LastName: this.userInForm.lastname,
-      MiddleName: this.userInForm.middlename,
-      BirthDate: this.userInForm.birthDate,
+      FirstName: this.userInForm.firstName,
+      LastName: this.userInForm.lastName,
+      MiddleName: this.userInForm.middleName,
+      BirthDate: this.userInForm.birthDate.toISOString().split('.0000Z')[0],
       Phone: this.userInForm.phone,
       Email: this.userInForm.email
     };
     if (this.userInForm.accsesLevel == AccsesLevel.ADMIN) {
-      url += 'admin';
+      url += 'admins';
     } else if (this.userInForm.accsesLevel == AccsesLevel.PARENT) {
-      url += 'parent';
+      url += 'parents';
     } else if (this.userInForm.accsesLevel == AccsesLevel.STUDENT) {
-      url += 'student';
+      url += 'students';
       obj.Country = this.address.country;
       obj.Region = this.address.region;
       obj.Area = this.address.area;
@@ -230,10 +268,10 @@ export class AdministrateUsersComponent implements OnInit {
       obj.Street = this.address.street;
       obj.House = this.address.house;
       obj.Flat = this.address.flat;
-      obj.DateOfEntry = this.dateStartWork;
+      obj.DateOfEntry = this.dateStartWork.toISOString().split('T')[0];
     } else if (this.userInForm.accsesLevel == AccsesLevel.TEACHER) {
-      url += 'teacher';
-      obj.DateStartWork = this.dateStartWork;
+      url += 'teachers';
+      obj.DateStartWork = this.dateStartWork.toISOString().split('T')[0]
     }
     url += `/${this.userInForm.id}`;
     fetch(url, {
@@ -255,9 +293,9 @@ export class AdministrateUsersComponent implements OnInit {
     url = `api/users/[R]/${this.userInForm.id}/update-relatives`;
 
     if(this.userInForm.accsesLevel == AccsesLevel.STUDENT){
-      url = url.replace('[R]', 'student');
+      url = url.replace('[R]', 'students');
     }else if(this.userInForm.accsesLevel == AccsesLevel.PARENT){
-      url = url.replace('[R]', 'parent');
+      url = url.replace('[R]', 'parents');
     }
     fetch(url, {
       method: 'PUT',
@@ -317,8 +355,22 @@ export class AdministrateUsersComponent implements OnInit {
         let data = json as BaseResponse<User[]>;
         if (data.success && data.data) {
           this.relativesList = data.data.map(p => new RelationshipsFromUserModel(p.id,
-            `${p.lastname} ${p.firstname}${(p.middlename !== undefined ? ' ' + p.middlename : '')}`
+            `${p.lastName} ${p.firstName}${(p.middleName !== undefined ? ' ' + p.middleName : '')}`
             , p.birthDate, this.relativesList.findIndex(x => x.id == p.id) != -1));
+        } else {
+          alert(data.message);
+        }
+      });
+  }
+
+  loadTeacherDisciplines(): Promise<void> {
+    this.disciplines = [];
+    return fetch(`api/users/teacher/${this.userInForm.id}/disciplines`)
+      .then(response => response.json())
+      .then(json => {
+        let data = json as BaseResponse<Discipline[]>;
+        if (data.success && data.data) {
+          this.disciplines = data.data.map(p => new DisciplineViewModel(p.disciplineCode, p.disciplineFullName, true));
         } else {
           alert(data.message);
         }
@@ -331,7 +383,12 @@ export class AdministrateUsersComponent implements OnInit {
   }
 
   searchUsers(): void {
-    
+    this.usersApi.getUsers(0, this.itemLimit,this.getSearchText).then(x => {
+      if (!!x.data?.data){
+        this.users = x.data.data;
+        this.navigatorData = new NavigatorData(x.data.totalPages, x.data.page, 6);
+      }
+    });
   }
 
   selectRelative(id: number): void {
@@ -350,4 +407,11 @@ class RelationshipsFromUserModel {
     public birthDate: Date,
     public selected: boolean,
   ) { }
+}
+class DisciplineViewModel implements Discipline {
+  constructor(
+    public disciplineCode: string,
+    public disciplineFullName: string,
+    public selected: boolean,
+) { }
 }

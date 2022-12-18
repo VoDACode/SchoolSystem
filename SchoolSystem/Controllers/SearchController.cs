@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SchoolSystem.DataModels;
+using SchoolSystem.Migrations;
 using SchoolSystem.Responses;
+using System.Collections.Generic;
 using System.Data;
 
 namespace SchoolSystem.Controllers
@@ -16,12 +18,17 @@ namespace SchoolSystem.Controllers
         public SearchController(DbApp db)
         {
             DB = db;
+            GC.Collect();
         }
 
         [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Teacher}")]
         [HttpGet]
         public async Task<IActionResult> Search(string q, int page = 1, int limit = 10)
         {
+            if (limit < 0 || limit > 50)
+            {
+                return BadRequest(new Response(false, "Limit must be between 0 and 50"));
+            }
             if (q == null)
                 return BadRequest(new Response(false, "Query is required"));
 
@@ -32,20 +39,23 @@ namespace SchoolSystem.Controllers
             p.MiddleName.Contains(q)
             ).Skip((page - 1) * limit).Take(limit).ToListAsync();
 
-            return Ok(new ResponseUsersList(true, users));
+            return Ok(new ResponseUser(true, users));
         }
 
         [Authorize(Roles = UserRoles.Admin)]
         [HttpGet("parents")]
-        public async Task<IActionResult> GetParents(string? q = null, int top = 10, int skip = 0)
+        public async Task<IActionResult> GetParents(string? q = null, int page = 1, int limit = 10)
         {
+            if (limit < 0 || limit > 50)
+            {
+                return BadRequest(new Response(false, "Limit must be between 0 and 50"));
+            }
             IQueryable<Parent> users;
             if (string.IsNullOrEmpty(q))
             {
                 users = DB.Parents
                     .OrderBy(p => p.User.FirstName)
-                    .Skip(skip)
-                    .Take(top);
+                    .Skip((page - 1) * limit).Take(limit);
             }
             else
             {
@@ -53,8 +63,7 @@ namespace SchoolSystem.Controllers
                 users = DB.Parents.Where(p => p.User.FirstName.ToUpper().Contains(q) ||
                                                     p.User.LastName.ToUpper().Contains(q) ||
                                                     p.User.MiddleName!.ToUpper().Contains(q))
-                    .Skip(skip)
-                    .Take(top)
+                    .Skip((page - 1) * limit).Take(limit)
                     .OrderBy(p => p.User.FirstName);
             }
             var res = users.ToList();
@@ -62,20 +71,23 @@ namespace SchoolSystem.Controllers
             {
                 await res[i].InitUser(DB);
             }
-            return Ok(new ResponseUsersList(true, res.Select(p => p.User).ToList()));
+            return Ok(new ResponseUser(true, res.Select(p => p.User).ToList()));
         }
 
         [Authorize(Roles = UserRoles.Admin)]
         [HttpGet("students")]
-        public async Task<IActionResult> GetStudents(string? q = null, int top = 10, int skip = 0)
+        public async Task<IActionResult> GetStudents(string? q = null, int page = 1, int limit = 10)
         {
+            if (limit < 0 || limit > 50)
+            {
+                return BadRequest(new Response(false, "Limit must be between 0 and 50"));
+            }
             IQueryable<Student> users;
             if (string.IsNullOrEmpty(q))
             {
                 users = DB.Students
                     .OrderBy(p => p.User.FirstName)
-                    .Skip(skip)
-                    .Take(top);
+                    .Skip((page - 1) * limit).Take(limit);
             }
             else
             {
@@ -83,8 +95,7 @@ namespace SchoolSystem.Controllers
                 users = DB.Students.Where(p => p.User.FirstName.ToUpper().Contains(q) ||
                                                     p.User.LastName.ToUpper().Contains(q) ||
                                                     p.User.MiddleName!.ToUpper().Contains(q))
-                    .Skip(skip)
-                    .Take(top)
+                    .Skip((page - 1) * limit).Take(limit)
                     .OrderBy(p => p.User.FirstName);
             }
             var res = users.ToList();
@@ -92,7 +103,7 @@ namespace SchoolSystem.Controllers
             {
                 await res[i].InitUser(DB);
             }
-            return Ok(new ResponseUsersList(true, res.Select(p => p.User).ToList()));
+            return Ok(new ResponseUser(true, res.Select(p => p.User).ToList()));
         }
     }
 }

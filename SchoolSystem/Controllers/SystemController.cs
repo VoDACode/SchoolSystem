@@ -19,8 +19,9 @@ namespace SchoolSystem.Controllers
             DB = db;
             if (!IsFirstStart)
             {
-                IsFirstStart = DB.Users.Any();
+                IsFirstStart = !DB.Users.Any();
             }
+            GC.Collect();
         }
 
         [HttpGet("firstStart")]

@@ -23,6 +23,8 @@ import { AuthGuard } from './services/AuthGuard';
 import { LogoutComponent } from './logout/logout.component';
 import { PageNavigatorComponent } from './page-navigator/page-navigator.component';
 import { DisciplineEditorComponent } from './discipline-editor/discipline-editor.component';
+import { GroupsComponent } from './groups/groups.component';
+import { MyPageComponent } from './my-page/my-page.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { DisciplineEditorComponent } from './discipline-editor/discipline-editor
     LogoutComponent,
     PageNavigatorComponent,
     DisciplineEditorComponent,
+    GroupsComponent,
+    MyPageComponent,
   ],
   imports: [
     FormsModule,

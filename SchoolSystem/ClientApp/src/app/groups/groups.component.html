@@ -1,0 +1,128 @@
+<main>
+    <div class="container">
+        <h1>Класи</h1>
+        <div class="header">
+            <div>
+                <input type="text" placeholder="Пошук" (change)="search()" [(ngModel)]="searchText" />
+                <button (click)="search()">Пошук</button>
+            </div>
+            <div class="create-and-navigation">
+                <div>
+                    <button type="button" class="btn btn-outline-primary" (click)="addNew()">Додати новий
+                        клас</button>
+                </div>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Назва</th>
+                    <th scope="col">Класний керівник</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Кількість учнів</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let group of groups">
+                    <td>{{group.groupCode}}</td>
+                    <td>{{group.classTeacher.firstName}} {{group.classTeacher.lastName}}{{!group.classTeacher.middleName
+                        ? '' : ' ' + group.classTeacher.middleName}}</td>
+                    <td>{{group.groupStatus}}</td>
+                    <td>{{group.studentsIds.length}}</td>
+                    <td class="actions">
+                        <button type="button" class="btn btn-outline-primary" (click)="edit(group)">Редагувати</button>
+                        <button type="button" class="btn btn-outline-primary" (click)="configureStudents(group)">Учні</button>
+                        <button type="button" class="btn btn-outline-danger" (click)="delete(group)">Видалити</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<jw-modal [id]="'group-modal'">
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="code">Клас</label>
+            <input *ngIf="!editMode" type="text" class="form-control{{isValidCode ? '' : ' is-invalid'}}" id="code"
+                placeholder="1-А" [(ngModel)]="selectGroup.groupCode" (input)="onInputGroupCode($event)">
+            <input *ngIf="editMode" type="text" class="form-control" id="code" placeholder="Код класу"
+                value="{{selectGroup.groupCode}}" disabled>
+        </div>
+        <div class="form-group">
+            <label for="status">Статус</label>
+            <input type="text" class="form-control" id="status" placeholder="Статус"
+                [(ngModel)]="selectGroup.groupStatus">
+        </div>
+        <div class="form-group">
+            <div class="input-object">
+                <span>Виберіть класного керівнка</span>
+                <div class="teachers">
+                    <div class="header">
+                        <div class="search">
+                            <input type="text" placeholder="Пошук..." (change)="searchInModalChange()" [(ngModel)]="searchInModal">
+                            <button type="button" class="btn btn-primary"
+                                (click)="searchInModalChange()">Знайти</button>
+                        </div>
+                        <div class="navigarot">
+                            <app-page-navigator [currentPage]="modalNavigator.currentPage"
+                                [totalPages]="modalNavigator.pageCount" [navigatorSize]="modalNavigator.size"
+                                (pageChange)="pageChange($event)"></app-page-navigator>
+                        </div>
+                    </div>
+                    <div class="items">
+                        <div class="item{{item.selected == true? ' selected' : ''}}" *ngFor="let item of teachers"
+                            (click)="selectTeacher(item)">
+                            <div>
+                                <span>{{item.firstName}} {{item.lastName}}{{item.middleName ? ' ' + item.middleName :
+                                    ''}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="save()"
+            [disabled]="!isCorrectModalData">Зберегти</button>
+        <button type="button" class="btn btn-outline-danger" (click)="closeModal()">Відмінити</button>
+    </div>
+</jw-modal>
+
+<jw-modal [id]="'group-students-modal'">
+    <div class="modal-body">
+        <span>Виберіть учнів</span>
+        <div class="form-group search">
+            <input type="text" placeholder="Пошук..." (change)="searchInStudentsChange()" [(ngModel)]="searchInStudents">
+            <button type="button" class="btn btn-primary" (click)="searchInStudentsChange()">Знайти</button>
+        </div>
+        <div class="form-group">
+            <div class="input-object">
+                <div class="teachers">
+                    <div class="header">
+                        <div class="navigarot">
+                            <app-page-navigator [currentPage]="studentsNavigator.currentPage"
+                                [totalPages]="studentsNavigator.pageCount" [navigatorSize]="studentsNavigator.size"
+                                (pageChange)="pageStudentsChange($event)"></app-page-navigator>
+                        </div>
+                    </div>
+                    <div class="items">
+                        <div class="item{{item.selected == true? ' selected' : ''}}" *ngFor="let item of students"
+                            (click)="selectStudent(item)">
+                            <div>
+                                <span>[{{item.id}}] {{item.firstName}} {{item.lastName}}{{item.middleName ? ' ' + item.middleName :
+                                    ''}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" (click)="saveStudents()">Зберегти</button>
+        <button type="button" class="btn btn-outline-danger" (click)="closeStudentsModal()">Відмінити</button>
+    </div>
+</jw-modal>

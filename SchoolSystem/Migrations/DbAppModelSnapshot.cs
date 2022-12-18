@@ -24,13 +24,13 @@ namespace SchoolSystem.Migrations
 
             modelBuilder.Entity("DisciplineTeacher", b =>
                 {
-                    b.Property<string>("DisciplinesDiscipline_Code")
+                    b.Property<string>("DisciplinesDisciplineCode")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("TeachersId")
                         .HasColumnType("int");
 
-                    b.HasKey("DisciplinesDiscipline_Code", "TeachersId");
+                    b.HasKey("DisciplinesDisciplineCode", "TeachersId");
 
                     b.HasIndex("TeachersId");
 
@@ -100,31 +100,29 @@ namespace SchoolSystem.Migrations
                     b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DisciplineCode")
+                    b.Property<string>("DisciplineCodeCode")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MarkType")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("create_date_mark");
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Discipline_Code")
+                    b.Property<string>("DisciplineCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<float>("Mark")
-                        .HasColumnType("real")
-                        .HasColumnName("mark");
+                        .HasColumnType("real");
 
                     b.Property<string>("MarkTypesType")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("StudentId", "TeacherId", "DisciplineCode", "MarkType");
+                    b.HasKey("StudentId", "TeacherId", "DisciplineCodeCode", "MarkType");
 
-                    b.HasIndex("Discipline_Code");
+                    b.HasIndex("DisciplineCode");
 
                     b.HasIndex("MarkTypesType");
 
@@ -135,16 +133,14 @@ namespace SchoolSystem.Migrations
 
             modelBuilder.Entity("SchoolSystem.DataModels.Discipline", b =>
                 {
-                    b.Property<string>("Discipline_Code")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("discipline_code");
+                    b.Property<string>("DisciplineCode")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("DisciplineFullName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("discipline_full_name");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Discipline_Code");
+                    b.HasKey("DisciplineCode");
 
                     b.ToTable("Disciplines");
                 });
@@ -153,19 +149,16 @@ namespace SchoolSystem.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("file_id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("file_name");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Size")
-                        .HasColumnType("bigint")
-                        .HasColumnName("file_siez");
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -175,20 +168,16 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.Group", b =>
                 {
                     b.Property<string>("GroupCode")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("group_code");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ClassTeacherId")
-                        .HasColumnType("int")
-                        .HasColumnName("teacher_id");
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfCreation")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_of_creation");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("GroupStatus")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("group_status");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("RatingId")
                         .HasColumnType("int");
@@ -206,21 +195,18 @@ namespace SchoolSystem.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("homework_id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("ClosingDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("closing_date");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("homework_description");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discipline_Code")
+                    b.Property<string>("DisciplineCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -232,17 +218,15 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("PublicationDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("publication_date");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("homework_title");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Discipline_Code");
+                    b.HasIndex("DisciplineCode");
 
                     b.HasIndex("FileId");
 
@@ -255,22 +239,19 @@ namespace SchoolSystem.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("lesson_id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DateOfClasses")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_of_classes");
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Discipline_Code")
+                    b.Property<string>("DisciplineCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("time")
-                        .HasColumnName("end_time");
+                        .HasColumnType("time");
 
                     b.Property<string>("GroupCode")
                         .IsRequired()
@@ -281,16 +262,14 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("time")
-                        .HasColumnName("start_time");
+                        .HasColumnType("time");
 
                     b.Property<string>("Topic")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("lesson_topic");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Discipline_Code");
+                    b.HasIndex("DisciplineCode");
 
                     b.HasIndex("GroupCode");
 
@@ -302,8 +281,22 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.LessonType", b =>
                 {
                     b.Property<string>("TypeName")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("lesson_type_name");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("HighLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("InitialLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MinLevel")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SufficientLevel")
+                        .HasColumnType("int");
 
                     b.HasKey("TypeName");
 
@@ -322,16 +315,13 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CheckDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("check_date");
+                        .HasColumnType("datetime2");
 
                     b.Property<float>("Mark")
-                        .HasColumnType("real")
-                        .HasColumnName("mark");
+                        .HasColumnType("real");
 
                     b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("release_date");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("StudentId", "HomeworkId");
 
@@ -351,12 +341,10 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Distinction")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("distinction");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("Mark")
-                        .HasColumnType("real")
-                        .HasColumnName("mark");
+                        .HasColumnType("real");
 
                     b.HasKey("StudentId", "LessonId");
 
@@ -368,8 +356,7 @@ namespace SchoolSystem.Migrations
             modelBuilder.Entity("SchoolSystem.DataModels.MarkTypes", b =>
                 {
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(450)")
-                        .HasColumnName("mark_type");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Type");
 
@@ -449,55 +436,45 @@ namespace SchoolSystem.Migrations
 
                     b.Property<string>("Area")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("area_name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("country");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<DateTime?>("DateOfEnd")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_of_end");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateOfEntry")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_of_entry");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("Flat")
-                        .HasColumnType("int")
-                        .HasColumnName("flat_numder");
+                        .HasColumnType("int");
 
                     b.Property<string>("House")
                         .IsRequired()
                         .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)")
-                        .HasColumnName("house_numder");
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("Region")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("region_name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Settlement")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("settlement_name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Street")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("street_name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Type")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
-                        .HasColumnName("student_type");
+                        .HasColumnType("nvarchar(128)");
 
                     b.HasKey("Id");
 
@@ -510,12 +487,10 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DateEndWork")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_end_work");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateStartWork")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_start_work");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -526,14 +501,12 @@ namespace SchoolSystem.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("user_id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Birthday")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("birthday");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -541,36 +514,30 @@ namespace SchoolSystem.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("first_name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("last_name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Login")
                         .IsRequired()
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("user_login");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("MiddleName")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)")
-                        .HasColumnName("middle_name");
+                        .HasColumnType("nvarchar(64)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("user_password");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
-                        .HasColumnName("phone_number");
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -586,16 +553,13 @@ namespace SchoolSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfMarking")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_of_marking");
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("LataFor")
-                        .HasColumnType("int")
-                        .HasColumnName("late_for");
+                        .HasColumnType("int");
 
                     b.Property<int?>("VisitationStatus")
-                        .HasColumnType("int")
-                        .HasColumnName("visitation_status");
+                        .HasColumnType("int");
 
                     b.HasKey("StudentId", "LessonId");
 
@@ -608,28 +572,23 @@ namespace SchoolSystem.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("comment_id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Comment")
                         .IsRequired()
                         .HasMaxLength(2048)
-                        .HasColumnType("nvarchar(2048)")
-                        .HasColumnName("comment");
+                        .HasColumnType("nvarchar(2048)");
 
                     b.Property<DateTime>("DateOfWriting")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("date_of_writing");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("StudentId")
-                        .HasColumnType("int")
-                        .HasColumnName("student_id");
+                        .HasColumnType("int");
 
                     b.Property<int>("TeacherId")
-                        .HasColumnType("int")
-                        .HasColumnName("teacher_id");
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -644,7 +603,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.Discipline", null)
                         .WithMany()
-                        .HasForeignKey("DisciplinesDiscipline_Code")
+                        .HasForeignKey("DisciplinesDisciplineCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -715,7 +674,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.Discipline", "Discipline")
                         .WithMany()
-                        .HasForeignKey("Discipline_Code")
+                        .HasForeignKey("DisciplineCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -765,7 +724,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.Discipline", "Discipline")
                         .WithMany()
-                        .HasForeignKey("Discipline_Code")
+                        .HasForeignKey("DisciplineCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -790,7 +749,7 @@ namespace SchoolSystem.Migrations
                 {
                     b.HasOne("SchoolSystem.DataModels.Discipline", "Discipline")
                         .WithMany()
-                        .HasForeignKey("Discipline_Code")
+                        .HasForeignKey("DisciplineCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

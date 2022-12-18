@@ -8,9 +8,7 @@ namespace SchoolSystem.DataModels
         public Lesson Lesson { get; set; }
         public int StudentId { get; set; }
         public Student Student { get; set; }
-        [Column("mark")]
         public float Mark { get; set; }
-        [Column("distinction")]
         public string? Distinction { get; set; }
     }
 }

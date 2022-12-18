@@ -1,0 +1,9 @@
+.actions{
+    text-align: center !important;
+}
+td.actions{
+    text-align: end !important;
+}
+.actions button{
+    margin: 0 5px;
+}

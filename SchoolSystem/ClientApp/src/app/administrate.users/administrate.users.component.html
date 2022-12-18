@@ -4,7 +4,7 @@
         <h1>Користувачі</h1>
         <div class="header">
             <div>
-                <input type="text" placeholder="Пошук" [(ngModel)]="searchText" />
+                <input type="text" placeholder="Пошук" (change)="searchUsers()" [(ngModel)]="searchText" />
                 <button (click)="searchUsers()">Пошук</button>
             </div>
             <div class="create-and-navigation">
@@ -14,7 +14,7 @@
                 </div>
                 <div class="navigation">
                     <app-page-navigator [currentPage]="navigatorData.currentPage" [totalPages]="navigatorData.pageCount"
-                        [navigatorSize]="navigatorData.size"></app-page-navigator>
+                        [navigatorSize]="navigatorData.size" (pageChange)="onChangePage($event)"></app-page-navigator>
                 </div>
             </div>
         </div>
@@ -35,7 +35,7 @@
             <tbody>
                 <tr *ngFor="let user of users">
                     <th scope="row">{{user.id}}</th>
-                    <td>{{user.lastname}} {{user.firstname}} {{user.middlename}}</td>
+                    <td>{{user.lastName}} {{user.firstName}} {{user.middleName}}</td>
                     <td>{{user.email}}</td>
                     <td>{{user.phone}}</td>
                     <td>{{user.login}}</td>
@@ -58,12 +58,12 @@
         </table>
         <div class="navigation">
             <app-page-navigator [currentPage]="navigatorData.currentPage" [totalPages]="navigatorData.pageCount"
-                [navigatorSize]="navigatorData.size"></app-page-navigator>
+                [navigatorSize]="navigatorData.size" (pageChange)="onChangePage($event)"></app-page-navigator>
         </div>
     </div>
 </main>
 
-<!--Create student-->
+<!--Create or edit user-->
 
 <jw-modal id="student_editor" [viewCloseButton]="true" (onclose)="onCloseModal">
     <div class="box" *ngIf="createStep == 0">
@@ -79,15 +79,15 @@
             </div>
             <div class="input-object">
                 <span>Прізвище</span>
-                <input type="text" [(ngModel)]="userInForm.lastname" placeholder="Прізвище">
+                <input type="text" [(ngModel)]="userInForm.lastName" placeholder="Прізвище">
             </div>
             <div class="input-object">
                 <span>Ім'я</span>
-                <input type="text" [(ngModel)]="userInForm.firstname" placeholder="Ім'я">
+                <input type="text" [(ngModel)]="userInForm.firstName" placeholder="Ім'я">
             </div>
             <div class="input-object">
                 <span>По батькові</span>
-                <input type="text" [(ngModel)]="userInForm.middlename" placeholder="По батькові">
+                <input type="text" [(ngModel)]="userInForm.middleName" placeholder="По батькові">
             </div>
             <div class="input-object">
                 <span>Дата народження</span>
@@ -170,7 +170,7 @@
                 <span>Перелк {{userInForm.accsesLevel == 'PARENT' ? 'дітей' : 'батьків'}}</span>
                 <div class="box-relatives">
                     <div class="search">
-                        <input type="text" placeholder="Пошук..." [(ngModel)]="searchInModal">
+                        <input type="text" placeholder="Пошук..." (change)="searchChange()" [(ngModel)]="searchInModal">
                         <button type="button" class="btn btn-primary" (click)="searchChange()">Знайти</button>
                     </div>
                     <div class="items">
@@ -181,6 +181,25 @@
                             </div>
                             <div>
                                 <span>{{item.birthDate | date:'dd.MM.yyyy'}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="input-forms" *ngIf="userInForm.accsesLevel == 'TEACHER' && editMode">
+            <div class="input-object">
+                <span>Перелк предметів</span>
+                <div class="box-relatives">
+                    <div class="search">
+                        <input type="text" placeholder="Пошук..." (change)="searchChange()" [(ngModel)]="searchInModal">
+                        <button type="button" class="btn btn-primary" (click)="searchChange()">Знайти</button>
+                    </div>
+                    <div class="items">
+                        <div class="item{{item.selected == true? ' selected' : ''}}" *ngFor="let item of disciplines"
+                            (click)="selectDiscipline(item)">
+                            <div>
+                                <span>{{item.disciplineFullName}}</span>
                             </div>
                         </div>
                     </div>

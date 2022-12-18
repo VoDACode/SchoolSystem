@@ -13,11 +13,8 @@ namespace SchoolSystem.DataModels
         public Lesson Lesson { get; set; }
         public int StudentId { get; set; }
         public Student Student { get; set; }
-        [Column("visitation_status")]
         public VisitationStatus? VisitationStatus { get; set; }
-        [Column("date_of_marking")]
         public DateTime DateOfMarking { get; set; }
-        [Column("late_for")]
         public int? LataFor { get; set; }
     }
 }

@@ -9,37 +9,27 @@ namespace SchoolSystem.DataModels
         public int Id { get; set; }
 
         [Required]
-        [Column("date_of_entry")]
         public DateTime DateOfEntry { get; set; }
-        [Column("date_of_end")]
         public DateTime? DateOfEnd { get; set; }
         [MaxLength(128)]
-        [Column("student_type")]
         public string? Type { get; set; }
         [Required]
-        [MaxLength(64)]
-        [Column("country")]
+        [MaxLength(128)]
         public string Country { get; set; }
         [Required]
-        [MaxLength(64)]
-        [Column("region_name")]
+        [MaxLength(128)]
         public string Region { get; set; }
-        [MaxLength(64)]
-        [Column("area_name")]
+        [MaxLength(128)]
         public string? Area { get; set; }
         [Required]
-        [MaxLength(64)]
-        [Column("settlement_name")]
+        [MaxLength(128)]
         public string Settlement { get; set; }
         [Required]
         [MaxLength(64)]
-        [Column("street_name")]
         public string Street { get; set; }
         [Required]
         [MaxLength(8)]
-        [Column("house_numder")]
         public string House { get; set; }
-        [Column("flat_numder")]
         public int? Flat { get; set; }
 
         public IList<Parent> Parents { get; set; } = new List<Parent>();
