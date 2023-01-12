@@ -21,6 +21,7 @@
                     <th scope="col">Статус</th>
                     <th scope="col">Кількість учнів</th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,9 @@
                         <button type="button" class="btn btn-outline-primary" (click)="edit(group)">Редагувати</button>
                         <button type="button" class="btn btn-outline-primary" (click)="configureStudents(group)">Учні</button>
                         <button type="button" class="btn btn-outline-danger" (click)="delete(group)">Видалити</button>
+                    </td>
+                    <td>
+                        <img class="download-list" src="/assets/images/download-48.png" title="Завантажити список учнів" (click)="downloadStudents(group.groupCode)">
                     </td>
                 </tr>
             </tbody>

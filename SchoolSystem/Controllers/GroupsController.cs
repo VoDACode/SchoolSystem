@@ -161,16 +161,16 @@ namespace SchoolSystem.Controllers
             var group = await Db.Groups.FirstOrDefaultAsync(g => g.GroupCode == code);
             if (group == null)
                 return NotFound(new Response(false, "Group not found"));
-            var students = Db.Students.AsQueryable();
+            var studentsQuery = Db.Students.AsQueryable();
             
-            await students.Include(s => s.Groups).Include(s => s.User).LoadAsync();
+            await studentsQuery.Include(s => s.Groups).Include(s => s.User).LoadAsync();
 
             if (!string.IsNullOrWhiteSpace(q))
             {
-                students = students.Where(p => p.User.FirstName.Contains(q) || p.User.LastName.Contains(q) || p.User.MiddleName.Contains(q) || p.User.Email.Contains(q) || p.User.PhoneNumber.Contains(q));
+                studentsQuery = studentsQuery.Where(p => p.User.FirstName.Contains(q) || p.User.LastName.Contains(q) || p.User.MiddleName.Contains(q) || p.User.Email.Contains(q) || p.User.PhoneNumber.Contains(q));
             }
 
-            var list = students.Where(s => s.Groups.Any(g => g.GroupCode == code))
+            var list = studentsQuery.Where(s => s.Groups.Any(g => g.GroupCode == code))
                                 .Skip((page - 1) * limit).Take(limit);
 
             var resulr = new List<Student>();
@@ -178,14 +178,14 @@ namespace SchoolSystem.Controllers
             if (display == "all")
             {
                 var itemsInClass = await list.CountAsync();
-                var tmp = students.Where(s => !s.Groups.Any(g => g.GroupCode == code))
-                                .Skip(((page - 1) * (limit - itemsInClass < 0 ? 0 : limit - itemsInClass)))
-                                .Take(limit - itemsInClass < 0 ? 0 : limit - itemsInClass);
+                var tmp = studentsQuery.Where(s => !s.Groups.Any(g => g.GroupCode == code))
+                                .Skip(((page - 1) * Math.Max(limit - itemsInClass, 0)))
+                                .Take(Math.Max(limit - itemsInClass, 0));
                 if (await tmp.CountAsync() > 0)
                     resulr.AddRange(tmp);
             }
 
-            var count = (int)Math.Ceiling((double)await students.CountAsync() / limit);
+            var count = (int)Math.Ceiling((double)await studentsQuery.CountAsync() / limit);
             
             var responceList = resulr.Select(s => new StudentInGroupView(s, s.Groups.Any(g => g.GroupCode == code))).ToList();
             return Ok(new ResponsePage<StudentInGroupView>(true, responceList, count, page));

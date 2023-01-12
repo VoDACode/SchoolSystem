@@ -1,5 +1,9 @@
-.container{
+.container {
     max-width: 100% !important;
+}
+
+td {
+    position: relative;
 }
 
 .input-forms {
@@ -56,10 +60,26 @@
 .container .header .create-and-navigation .navigation {
     height: 24px;
 }
+
 .navigation {
     position: relative;
 }
+
 .navigation app-page-navigator {
     position: absolute;
     right: 0;
+}
+
+.download-certificate {
+    width: 40px;
+    height: 40x;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.download-certificate:hover{
+    cursor: pointer;
+    opacity: 0.5;
 }

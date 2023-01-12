@@ -8,6 +8,7 @@ import { Teacher } from 'src/models/TeacherModel';
 import { AccsesLevel } from 'src/types/AccsesLevelType';
 import { NavigatorData } from '../page-navigator/navgator-data';
 import { GroupApiService } from '../services/api/group.api/group.api.service';
+import { ReportsService } from '../services/api/reports/reports.service';
 import { UsersApiService } from '../services/api/users.api/users.api.service';
 import { ModalService } from '../_modal';
 
@@ -51,7 +52,8 @@ export class GroupsComponent implements OnInit {
 
   constructor(private groupApi: GroupApiService,
     private modal: ModalService,
-    private usersApi: UsersApiService) { }
+    private usersApi: UsersApiService,
+    private reports: ReportsService) { }
 
   ngOnInit(): void {
     this.groupApi.getGroups()
@@ -101,7 +103,7 @@ export class GroupsComponent implements OnInit {
           } else if (!student.selected && this.selectedStudents.some(s => s.id == student.id)) {
             this.selectedStudents.splice(this.selectedStudents.findIndex(s => s.id == student.id), 1);
           }
-          
+
         });
         this.studentsNavigator = new NavigatorData(response.data.totalPages, page, 6);
       }
@@ -228,7 +230,7 @@ export class GroupsComponent implements OnInit {
       .then(response => {
         if (!response.success) {
           console.error("Error: " + response.message);
-        }else{
+        } else {
           this.groups.find(g => g.groupCode == response.data?.groupCode)!.studentsIds = response.data?.studentsIds || [];
         }
       });
@@ -260,6 +262,10 @@ export class GroupsComponent implements OnInit {
     this.selectGroup = group;
     this.oldTeacherId = group.classTeacher.id;
     this.oldStatus = group.groupStatus;
+    this.selectedTeacher = new TeacherView(
+      new Teacher(group.classTeacher.id, group.classTeacher.firstName, group.classTeacher.lastName, group.classTeacher.middleName, '', '', '', new Date(), AccsesLevel.TEACHER, new Date(), new Date()),
+      true
+    );
     this.editMode = true;
     this.loadTeachers(this.selectGroup.classTeacher.id);
     this.modal.open("group-modal");
@@ -282,7 +288,12 @@ export class GroupsComponent implements OnInit {
   loadTeachers(teatherId: number): void {
     this.usersApi.getTeachers().then(response => {
       if (response.success && response.data) {
-        this.teachers = response.data.data.map(teacher => new TeacherView(teacher, teacher.id == teatherId));
+        this.teachers = this.selectedTeacher ? [this.selectedTeacher] : [];
+        const index = response.data.data.findIndex(t => t.id == this.selectedTeacher?.id);
+        if(index > -1) {
+          response.data.data.splice(index, 1);
+        }
+        this.teachers.push(...response.data.data.map(teacher => new TeacherView(teacher, teacher.id == teatherId)));
         this.modalNavigator = new NavigatorData(response.data.totalPages, response.data.page, 6);
       }
     });
@@ -300,6 +311,10 @@ export class GroupsComponent implements OnInit {
         this.studentsNavigator = new NavigatorData(response.data.totalPages, response.data.page, 6);
       }
     });
+  }
+
+  downloadStudents(group: string): void {
+    this.reports.downloadStudentsList(group);
   }
 }
 class TeacherView implements Teacher {

@@ -13,8 +13,8 @@ export class Parent implements User {
         public login: string,
         public email: string,
         public birthDate: Date,
-        public accsesLevel: AccsesLevel, 
-        public children: Student[] | null
+        public accsesLevel: AccsesLevel = AccsesLevel.PARENT, 
+        public students: Student[] | null
     ){}
     canViewPassword: boolean = false;
     password: string = "";

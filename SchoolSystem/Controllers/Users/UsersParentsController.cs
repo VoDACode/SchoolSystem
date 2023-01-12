@@ -22,7 +22,7 @@ namespace SchoolSystem.Controllers.Users
 
         [Authorize(Roles = UserRoles.Admin)]
         [HttpGet]
-        public async Task<IActionResult> GetParents(int page = 1, int limit = 10, string? q = "")
+        public async Task<IActionResult> GetParents(int page = 1, int limit = 10, string? q = "", [FromQuery] int[]? ignoreIds = null)
         {
             if (limit < 0 || limit > 50)
             {
@@ -30,6 +30,10 @@ namespace SchoolSystem.Controllers.Users
             }
             await DB.Parents.Include(p => p.User).LoadAsync();
             IQueryable<Parent> query = DB.Parents.AsQueryable();
+            if (ignoreIds != null && ignoreIds.Length > 0)
+            {
+                query = query.Where(p => !ignoreIds.Contains(p.Id));
+            }
             if (!string.IsNullOrEmpty(q))
             {
                 query = query.Where(p => p.User.FirstName.Contains(q) || p.User.LastName.Contains(q) || !string.IsNullOrEmpty(p.User.MiddleName) && p.User.MiddleName.Contains(q));
@@ -60,6 +64,54 @@ namespace SchoolSystem.Controllers.Users
             await DB.Users.Where(p => p.Id == id).Include(p => p.Parent.Students).ThenInclude(p => p.User).LoadAsync();
 
             return Ok(new ResponseParent(true, user));
+        }
+
+        [Authorize(Roles = UserRoles.Admin)]
+        [HttpGet("{id}/students")]
+        public async Task<IActionResult> GetStudentParents(int id, int page = 1, int limit = 10, string? q = "", string? display = "this")
+        {
+            if (limit < 0 || limit > 50)
+            {
+                return BadRequest(new Response(false, "Limit must be between 0 and 50"));
+            }
+
+            if (!await DB.Parents.AnyAsync(s => s.Id == id))
+            {
+                return NotFound(new Response(false, "User not found"));
+            }
+
+            int pageCount = 0;
+
+            var result = new List<ExistInExtension<StudentView>>();
+            var query = DB.Students.AsQueryable();
+
+            await query.Include(p => p.User).LoadAsync();
+            await query.Include(p => p.Parents).LoadAsync();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                query = query.Where(p => p.User.FirstName.Contains(q) || p.User.LastName.Contains(q) || !string.IsNullOrEmpty(p.User.MiddleName) && p.User.MiddleName.Contains(q));
+            }
+            
+            pageCount = (int)Math.Ceiling((double)await query.CountAsync() / limit);
+
+            result.AddRange(query.Where(p => p.Parents.Any(p => p.Id == id))
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .Select(p => new ExistInExtension<StudentView>(new StudentView(p, true), true)));
+
+            if (display == "all")
+            {
+                var itemsCount = result.Count;
+                var tmp = await query.Where(p => !p.Parents.Any(p => p.Id == id))
+                    .Skip((page - 1) * Math.Max(limit - itemsCount, 0))
+                    .Take(Math.Max(limit - itemsCount, 0))
+                    .ToListAsync();
+                result.AddRange(tmp.Select(p => new ExistInExtension<StudentView>(new StudentView(p, true), false)));
+            }
+            await query.Include(p => p.User).LoadAsync();
+
+            return Ok(new ResponsePage<ExistInExtension<StudentView>>(true, result, pageCount, page));
         }
 
         [Authorize(Roles = UserRoles.Admin)]

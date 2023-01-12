@@ -9,6 +9,7 @@
         public string Phone { get; set; }
         public string Login { get; set; }
         public string Email { get; set; }
+        public DateTime BirthDate { get; set; }
 
         public IEnumerable<StudentView>? Students { get; set; }
 
@@ -21,21 +22,24 @@
             Phone = user.PhoneNumber;
             Login = user.Login;
             Email = user.Email;
+            BirthDate = user.Birthday;
+        }
+        public ParentView(User user, bool ignoreStudents = true) : this(user)
+        {
+            if (!ignoreStudents)
+            {
+                Students = user.Parent.Students.Select(s => new StudentView(s, true));
+            }
         }
 
-        public ParentView(Parent parent, bool ignoreStudents = true)
+        public ParentView(Parent parent, bool ignoreStudents = true) : this(parent.User)
         {
-            Id = parent.User.Id;
-            FirstName = parent.User.FirstName;
-            LastName = parent.User.LastName;
-            MiddleName = parent.User.MiddleName;
-            Phone = parent.User.PhoneNumber;
-            Login = parent.User.Login;
-            Email = parent.User.Email;
             if (!ignoreStudents)
             {
                 Students = parent.Students.Select(s => new StudentView(s, true));
             }
         }
+        public ParentView(Parent parent) : this(parent.User)
+        {}
     }
 }

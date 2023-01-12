@@ -1,1 +1,20 @@
-<p>home admin works!</p>
+<h1>Статистики</h1>
+<div>
+    <p>Співвідношення вчителів та учнів: {{studentsPerTeacher}}</p>
+</div>
+<div>
+    <p>Обраний клас</p>
+    <select (change)="changeGroup($event)">
+        <option selected disabled>
+            Виберіть клас
+        </option>
+        <option *ngFor="let class of classes" [value]="class.groupCode">
+            {{class.groupCode}}
+        </option>
+    </select>
+    <p>Кількість учнів у класі: {{studentsInGroup}}</p>
+    <p>Кількість учнів на потоці: {{studentsInStream}}</p>
+    
+    <p>Кількість батьків у класі: {{parentInGroup}}</p>
+    <p>Кількість батьків на потоці: {{parentInStream}}</p>
+</div>

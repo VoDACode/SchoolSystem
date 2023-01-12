@@ -30,6 +30,7 @@
                     <th scope="col">Роль</th>
                     <th scope="col">Редагувати</th>
                     <th scope="col">Видалити</th>
+                    <th scope="col">Додатково</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,6 +53,10 @@
                     <td>
                         <button type="button" class="btn btn-outline-danger"
                             (click)="deleteUser(user)">Видалити</button>
+                    </td>
+                    <td>
+                        <img *ngIf="user.accsesLevel == 'STUDENT'" class="download-certificate"
+                            src="/assets/images/download-certificate-48.png" (click)="downloadCertificate(user.id)">
                     </td>
                 </tr>
             </tbody>
@@ -169,9 +174,18 @@
             <div class="input-object">
                 <span>Перелк {{userInForm.accsesLevel == 'PARENT' ? 'дітей' : 'батьків'}}</span>
                 <div class="box-relatives">
-                    <div class="search">
-                        <input type="text" placeholder="Пошук..." (change)="searchChange()" [(ngModel)]="searchInModal">
-                        <button type="button" class="btn btn-primary" (click)="searchChange()">Знайти</button>
+                    <div class="header">
+                        <div class="search">
+                            <input type="text" placeholder="Пошук..." (change)="searchChange()"
+                                [(ngModel)]="searchInModal">
+                            <button type="button" class="btn btn-primary" (click)="searchChange()">Знайти</button>
+                        </div>
+                        <div class="navigator">
+                            <app-page-navigator [totalPages]="navigatorRelativesData.pageCount"
+                                [currentPage]="navigatorRelativesData.currentPage"
+                                [navigatorSize]="navigatorRelativesData.size"
+                                (pageChange)="changeRelativePage($event)"></app-page-navigator>
+                        </div>
                     </div>
                     <div class="items">
                         <div class="item{{item.selected == true? ' selected' : ''}}" *ngFor="let item of relativesList"

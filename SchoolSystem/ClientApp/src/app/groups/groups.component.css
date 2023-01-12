@@ -36,3 +36,8 @@ input.form-control.is-invalid {
 .actions > button{
     margin-left: 5px;
 }
+
+.download-list:hover{
+    cursor: pointer;
+    opacity: 0.5;
+}

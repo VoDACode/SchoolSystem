@@ -35,7 +35,7 @@ namespace SchoolSystem.Controllers.Users
                 query = query.Where(p => p.User.FirstName.Contains(q) || p.User.LastName.Contains(q) || !string.IsNullOrEmpty(p.User.MiddleName) && p.User.MiddleName.Contains(q));
             }
             var count = (int)Math.Ceiling((double)await query.CountAsync() / limit);
-            await query.Include(p => p.Parents).LoadAsync();
+            await query.Include(p => p.Parents).ThenInclude(p => p.User).LoadAsync();
             var usersList = await query.Skip((page - 1) * limit).Take(limit).ToListAsync();
             return Ok(new ResponsePage<Student, StudentView>(true, usersList, count, page));
         }
@@ -61,6 +61,54 @@ namespace SchoolSystem.Controllers.Users
             await DB.Users.Where(p => p.Id == id).Include(p => p.Student.Parents).ThenInclude(p => p.User).LoadAsync();
 
             return Ok(new ResponseExtend<User, StudentView>(true, "Students", user));
+        }
+
+        [Authorize(Roles = UserRoles.Admin)]
+        [HttpGet("{id}/parents")]
+        public async Task<IActionResult> GetStudentParents(int id, int page = 1, int limit = 10, string? q = "", string? display = "this")
+        {
+            if (limit < 0 || limit > 50)
+            {
+                return BadRequest(new Response(false, "Limit must be between 0 and 50"));
+            }
+
+            if (!await DB.Students.AnyAsync(s => s.Id == id))
+            {
+                return NotFound(new Response(false, "User not found"));
+            }
+
+            int pageCount = 0;
+
+            var result = new List<ExistInExtension<ParentView>>();
+            var query = DB.Parents.AsQueryable();
+            
+            await query.Include(p => p.User).LoadAsync();
+            await query.Include(p => p.Students).LoadAsync();
+
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                query = query.Where(p => p.User.FirstName.Contains(q) || p.User.LastName.Contains(q) || !string.IsNullOrEmpty(p.User.MiddleName) && p.User.MiddleName.Contains(q));
+            }
+
+            pageCount = (int)Math.Ceiling((double)await query.CountAsync() / limit);
+
+            result.AddRange(query.Where(p => p.Students.Any(p => p.Id == id))
+                .Skip((page - 1) * limit)
+                .Take(limit)
+                .Select(p => new ExistInExtension<ParentView>(new ParentView(p), true)));
+
+            if (display == "all")
+            {
+                var itemsCount = result.Count;
+                var tmp = await query.Where(p => !p.Students.Any(p => p.Id == id))
+                    .Skip((page - 1) * Math.Max(limit - itemsCount, 0))
+                    .Take(Math.Max(limit - itemsCount, 0))
+                    .ToListAsync();
+                result.AddRange(tmp.Select(p => new ExistInExtension<ParentView>(new ParentView(p), false)));
+            }
+            await query.Include(p => p.User).LoadAsync();
+
+            return Ok(new ResponsePage<ExistInExtension<ParentView>>(true, result, pageCount, page));
         }
 
         [Authorize(Roles = UserRoles.Admin)]

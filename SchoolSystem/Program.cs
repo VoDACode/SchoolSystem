@@ -5,11 +5,9 @@ using System.Text;
 //Pomelo.EntityFrameworkCore.MySql
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllersWithViews();
+builder.Configuration.AddJsonFile("config.json", optional: true, reloadOnChange: true);
 
-//server=localhost; database=myBD; user=test; password=123456789
 var connectionString = builder.Configuration["ConnectionDB"];
 builder.Services.AddDbContext<DbApp>(options =>
                options.UseSqlServer(connectionString));
@@ -48,15 +46,8 @@ if (!app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseSwagger(options =>
-    {
-        options.SerializeAsV2 = true;
-    });
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = string.Empty;
-    });
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
