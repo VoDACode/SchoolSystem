@@ -35,6 +35,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="doc-templates\certificate-of-study.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="doc-templates\student-list.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

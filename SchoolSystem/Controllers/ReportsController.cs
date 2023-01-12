@@ -82,6 +82,9 @@ namespace SchoolSystem.Controllers
         [HttpGet("certificate-of-student")]
         public async Task<IActionResult> GetCertificateOfStudent(int id, string whom)
         {
+            // Generate SQL code
+            // SELECT * FROM Students WHERE Id = 1
+
             var student = await DB.Students.Include(s => s.User).Include(p => p.Groups).FirstOrDefaultAsync(p => p.Id == id);
             if(student == null)
                 return NotFound();

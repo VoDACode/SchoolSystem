@@ -196,6 +196,7 @@ export class GroupsComponent implements OnInit {
   }
 
   addNew() {
+    this.selectedTeacher = null;
     this.selectGroup = new Group("", new ShortTeacherView(-1, "", "", ""));
     this.editMode = false;
     this.loadTeachers(-1);
